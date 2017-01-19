@@ -2,7 +2,7 @@ module full_adder(a, b, cin, sum, cout);
     input a, b, cin;
     output sum, cout;
 
-    assign sum = a ^ b ^ c;
+    assign sum = a ^ b ^ cin;
     assign cout = (a & b) ^ (cin & (a ^ b));
 endmodule 
 
@@ -13,7 +13,7 @@ module adder_n(A, B, cin, Sum, cout);
     output [0:(BITS-1)] Sum;
     output cout;
 
-    wire [0:BITS] carry;
+    wire [0:(BITS)] carry;
 
     genvar i;
     generate

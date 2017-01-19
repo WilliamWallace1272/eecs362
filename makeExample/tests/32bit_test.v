@@ -5,7 +5,7 @@ module testbench();
     wire [0:31] Sum;
     wire cout;
 
-    fa_nbit #(.WIDTH(32)) FA32 (
+    adder_n #(.BITS(32)) FA32 (
         .A(A),
         .B(B),
         .cin(cin),
