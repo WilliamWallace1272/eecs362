@@ -1,10 +1,10 @@
 //`timescale 1 ns / 10 ps
 
 module adder_test();
-    reg [0:31] A;
-    reg [0:31] B;
+    reg [31:0] A;
+    reg [31:0] B;
     reg cin;
-    wire [0:31] Sum;
+    wire [31:0] Sum;
     wire cout;
 
     adder_n #(.BITS(32)) ADDER_32 (
