@@ -1,27 +1,57 @@
 
 `timescale 1ns/100ps
 
-/*typedef enum logic [5:0] {
-  ALU_SLL       = 6'h04,
-  ALU_SRL       = 6'h06,
-  ALU_SRA       = 6'h07,
-  ALU_NOP       = 6'h15,
-  ALU_ADD       = 6'h20,
-  ALU_ADDU      = 6'h21,
-  ALU_SUB       = 6'h22,
-  ALU_SUBU      = 6'h23,
-  ALU_AND       = 6'h24,
-  ALU_OR        = 6'h25,
-  ALU_XOR       = 6'h26,
-  ALU_SEQ       = 6'h28,
-  ALU_SNE       = 6'h29,
-  ALU_SLT       = 6'h2a,
-  ALU_SGT       = 6'h2b,
-  ALU_SLE       = 6'h2c,
-  ALU_SGE       = 6'h2d,
-  MOVFP2I       = 6'h34,
-  MOVI2FP       = 6'h35
-} ALU_FUNC;*/
+
+`define  ALU_SLL    = 6'h04
+`define  ALU_SRL    = 6'h06
+`define  ALU_SRA    = 6'h07
+`define  ALU_NOP    = 6'h15
+`define  ALU_ADD    = 6'h20
+`define  ALU_ADDU   = 6'h21
+`define  ALU_SUB    = 6'h22
+`define  ALU_SUBU   = 6'h23
+`define  ALU_AND    = 6'h24
+`define  ALU_OR     = 6'h25
+`define  ALU_XOR    = 6'h26
+`define  ALU_SEQ    = 6'h28
+`define  ALU_SNE    = 6'h29
+`define  ALU_SLT    = 6'h2a
+`define  ALU_SGT    = 6'h2b
+`define  ALU_SLE    = 6'h2c
+`define  ALU_SGE    = 6'h2d
+`define  MOVFP2I    = 6'h34
+`define  MOVI2FP    = 6'h35
+
+module alu(A, B, func, result);
+    input [31:0] A, B;
+    input [5:0] func;
+    output [31:0] result;
+
+    reg out, arithmetic;
+    wire [31:0] lshift, rshift;
+
+    shift_left SHIFTL (.a(A), .b(B[4:0]), .result(lshift));
+    shift_right SHIFTR (.a(A), .b(B[4:0]), .arithmetic(arithmetic), .result(rshift));
+
+    always @* begin
+        case (func)
+            `ALU_SLL: out = lshift;
+            `ALU_SRL: 
+                begin
+                    arithmetic = 0;
+                    out = rshift;
+                end
+            `ALU_SRA:
+                begin
+                    arithmetic = 1;
+                    out = rshift;
+                end
+            default: out = 32'h00000000;
+        endcase
+    end
+
+    assign result = out;
+endmodule
 
 module shift_right (a, b, arithmetic, result);
     input [31:0] a;
