@@ -27,26 +27,54 @@ module alu(A, B, func, result);
     input [5:0] func;
     output [31:0] result;
 
-    reg out, arithmetic;
-    wire [31:0] lshift, rshift;
+    reg out, arithmetic, carry_in;
+    wire [31:0] lshift, rshift, adder_result, carry_out;
 
     shift_left SHIFTL (.a(A), .b(B[4:0]), .result(lshift));
     shift_right SHIFTR (.a(A), .b(B[4:0]), .arithmetic(arithmetic), .result(rshift));
+    adder_n ADDER (.A(A), .B(B), .cin(carry_in), .sum(adder_result), .cout(carry_out));
 
     always @* begin
         case (func)
-            `ALU_SLL: out = lshift;
-            `ALU_SRL: 
+            6'h04: //SLL
+                out = lshift;
+            6'h06: //SRL
                 begin
                     arithmetic = 0;
                     out = rshift;
                 end
-            `ALU_SRA:
+            6'h07: //SRA
                 begin
                     arithmetic = 1;
                     out = rshift;
                 end
-            default: out = 32'h00000000;
+            6'h15: //NOP
+                out = 32'h00000000;
+            6'h20: //ADD
+                begin
+                    carry_in = 0;
+                    out = adder_result;
+                end
+            6'h21: //ADDU
+                begin
+                    carry_in = 0;
+                    out = adder_result;
+                end
+            6'h22: //SUB
+                begin
+                    carry_in = 1;
+                    out = adder_result;
+                end
+            6'h23: //SUBU
+;
+            6'h24: //AND
+                out = A & B;
+            6'h25: //OR
+                out = A | B;
+            6'h26: //XOR
+                out = A ^ B;
+            default: 
+                out = 32'h00000000;
         endcase
     end
 
