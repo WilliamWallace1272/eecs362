@@ -8,12 +8,12 @@ endmodule
 
 module adder_n(A, B, cin, Sum, cout);
     parameter BITS=32;
-    input [(BITS-1):0] A, B;
+    input [0:(BITS-1)] A, B;
     input cin;
-    output [(BITS-1):0] Sum;
+    output [0:(BITS-1)] Sum;
     output cout;
 
-    wire [(BITS):0] carry;
+    wire [0:(BITS)] carry;
 
     genvar i;
     generate
@@ -21,12 +21,12 @@ module adder_n(A, B, cin, Sum, cout);
             full_adder ADDER_i (
                 .a(A[i]),
                 .b(B[i]),
-                .cin(carry[i]),
+                .cin(carry[i+1]),
                 .sum(Sum[i]),
-                .cout(carry[i+1]));
+                .cout(carry[i]));
         end
     endgenerate
 
-    assign cout = carry[BITS];
-    assign carry[0] = cin;
+    assign cout = carry[0];
+    assign carry[BITS] = cin;
 endmodule

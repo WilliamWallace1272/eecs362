@@ -1,38 +1,18 @@
-
 `timescale 1ns/100ps
 
-
-`define  ALU_SLL    = 6'h04
-`define  ALU_SRL    = 6'h06
-`define  ALU_SRA    = 6'h07
-`define  ALU_NOP    = 6'h15
-`define  ALU_ADD    = 6'h20
-`define  ALU_ADDU   = 6'h21
-`define  ALU_SUB    = 6'h22
-`define  ALU_SUBU   = 6'h23
-`define  ALU_AND    = 6'h24
-`define  ALU_OR     = 6'h25
-`define  ALU_XOR    = 6'h26
-`define  ALU_SEQ    = 6'h28
-`define  ALU_SNE    = 6'h29
-`define  ALU_SLT    = 6'h2a
-`define  ALU_SGT    = 6'h2b
-`define  ALU_SLE    = 6'h2c
-`define  ALU_SGE    = 6'h2d
-`define  MOVFP2I    = 6'h34
-`define  MOVI2FP    = 6'h35
-
 module alu(A, B, func, result);
-    input [31:0] A, B;
-    input [5:0] func;
-    output [31:0] result;
+    input [0:31] A, B;
+    input [0:5] func;
+    output [0:31] result;
 
-    reg out, arithmetic, carry_in;
-    wire [31:0] lshift, rshift, adder_result, carry_out;
+    reg  arithmetic, carry_in;
+    reg [0:31] adder_B, out;
+    wire [0:31] lshift, rshift, adder_result;
+    wire carry_out;
 
-    shift_left SHIFTL (.a(A), .b(B[4:0]), .result(lshift));
-    shift_right SHIFTR (.a(A), .b(B[4:0]), .arithmetic(arithmetic), .result(rshift));
-    adder_n ADDER (.A(A), .B(B), .cin(carry_in), .sum(adder_result), .cout(carry_out));
+    shift_left SHIFTL (.a(A), .b(B[27:31]), .result(lshift));
+    shift_right SHIFTR (.a(A), .b(B[27:31]), .arithmetic(arithmetic), .result(rshift));
+    adder_n ADDER (.A(A), .B(adder_B), .cin(carry_in), .Sum(adder_result), .cout(carry_out));
 
     always @* begin
         case (func)
@@ -53,26 +33,83 @@ module alu(A, B, func, result);
             6'h20: //ADD
                 begin
                     carry_in = 0;
+                    adder_B = B;
                     out = adder_result;
                 end
             6'h21: //ADDU
                 begin
                     carry_in = 0;
+                    adder_B = B;
                     out = adder_result;
                 end
             6'h22: //SUB
                 begin
                     carry_in = 1;
+                    adder_B = ~B;
                     out = adder_result;
                 end
             6'h23: //SUBU
-;
+                begin
+                    carry_in = 1;
+                    adder_B = ~B;
+                    out = adder_result;
+                end
             6'h24: //AND
                 out = A & B;
             6'h25: //OR
                 out = A | B;
             6'h26: //XOR
                 out = A ^ B;
+            6'h28: //SEQ
+                if ((A ^ B) == 32'h00000000)
+                    out = 32'h00000001;
+                else
+                        out = 32'h00000000;
+            6'h29: //SNE
+                if ((A ^ B) == 32'h00000000)
+                    out = 32'h00000000;
+                else
+                    out = 32'h00000001;
+            6'h2a: //SLT
+                begin 
+                    carry_in = 1;
+                    adder_B = ~B;
+                    if(adder_result[0])
+                        out = 32'h00000001;
+                    else
+                        out = 32'h00000000;
+                end
+            6'h2b: //SGT
+                begin
+                    carry_in = 1;
+                    adder_B = ~B;
+                    if(~adder_result[0])
+                        out = 32'h00000001;
+                    else
+                        out = 32'h00000000;
+                end
+            6'h2c: //SLE
+                begin
+                    carry_in = 1;
+                    adder_B = ~B;
+                    if((adder_result[0]) | ((A ^ B) == 32'h00000000))
+                        out = 32'h00000001;
+                    else
+                        out = 32'h00000000;
+                end
+            6'h2d: //SGE
+                begin
+                    carry_in = 1;
+                    adder_B = ~B;
+                    if((~adder_result[0]) | ((A ^ B) == 32'h00000000))
+                        out = 32'h00000001;
+                    else
+                        out = 32'h00000000;
+                end
+            6'h34: //MOVFP2I
+;
+            6'h35: //MOVI2FP
+;
             default: 
                 out = 32'h00000000;
         endcase
