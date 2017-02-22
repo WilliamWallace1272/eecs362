@@ -9,7 +9,7 @@ module reg_file (input clk, input we, input [0:4] wrAddr, input [0:31] wrData,
     assign rdDataB = regfile[rdAddrB];
 
     always @(posedge clk) begin
-        if (write)
+        if (we)
         begin
             if (wrAddr == 32'h0) 
                 regfile[wrAddr] <= 32'h0;
