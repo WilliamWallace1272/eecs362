@@ -41,7 +41,7 @@ module booth_mult (p, a, b, clk, sign);
             spp[kk] = $signed(pp[kk]);
             for(ii=0;ii<kk;ii=ii+1)
                 spp[kk] = {spp[kk],2'b00}; //multiply by 2 to the power x or shifting operation
-        end //for(kk=0;kk<N;kk=kk+1)
+        end 
         prod = spp[0];
     end
  
@@ -54,8 +54,6 @@ module booth_mult (p, a, b, clk, sign);
             3: for(jj=3*N/4;jj<N;jj=jj+1)  begin prod = prod + spp[jj];  end    
             default: ;
         endcase
-        //for(kk=1;kk<N;kk=kk+1)
-        //prod = prod + spp[kk];
         count = (count + 1);
     end
     assign p = prod[width*2-5:0];
