@@ -3,7 +3,7 @@
 module control(op_code, func_code, ctrl_signals, alu_ctrl);
     input [0:5] op_code;
     input [0:5] func_code;
-    output [0:6] ctrl_signals;
+    output [0:7] ctrl_signals;
     output [0:5] alu_ctrl;
 
 
@@ -15,11 +15,113 @@ module control(op_code, func_code, ctrl_signals, alu_ctrl);
 
     always @* begin
         case (op_code)
-            6'h04, 6'h06, 6'h07, 6'h15, 6'h20, 6'h21, 6'h22, 6'h23, 6'h24, 6'h25, 6'h26, 6'h28, 6'h29, 6'h2a, 6'h2b, 6'h2c, 6'h2d: // not including the floating point shitttt
-            begin
-                temp_ctrl_signals = 7'b1001000;
-                temp_alu_ctrl = func_code;
-            end
+            6'h00:
+                begin
+                    temp_ctrl_signals = 8'b10010000;
+                    temp_alu_ctrl = func_code;
+                end
+            6'h01:
+            ;
+            
+            6'h02: // j
+                begin
+                    temp_ctrl_signals = 8'b00000010; // dcs here if wondering 
+                    temp_alu_ctrl = 6'b000000;
+                end
+
+            6'h03:
+                begin 
+                end
+            6'h04:
+                begin 
+                end
+            6'h05:
+                begin 
+                end
+            6'h08:
+                begin 
+                end
+            6'h09:
+                begin 
+                end
+            6'h0a:
+                begin 
+                end
+            6'h0b:
+                begin 
+                end
+            6'h0c:
+                begin 
+                end
+            6'h0d:
+                begin 
+                end
+            6'h0e:
+                begin 
+                end
+            6'h0f:
+                begin 
+                end
+            6'h12:
+                begin 
+                end
+            6'h13:
+                begin 
+                end
+            6'h14:
+                begin 
+                end
+            6'h15:
+                begin 
+                end
+            6'h16:
+                begin 
+                end
+            6'h17:
+                begin 
+                end
+            6'18:
+                begin 
+                end
+            6'h19:
+                begin 
+                end
+            6'h1a:
+                begin 
+                end
+            6'h1b:
+                begin 
+                end
+            6'h1c:
+                begin 
+                end
+            6'h1d:
+                begin 
+                end
+            6'h20:
+                begin 
+                end
+            6'h21:
+                begin 
+                end
+            6'h23:
+                begin 
+                end
+            6'h24:
+                begin 
+                end
+            6'h25:
+                begin 
+                end
+            6'h28:
+                begin 
+                end
+            6'h29:
+                begin 
+                end
+            6'h2b:
+                begin 
+                end
             default: 
         ;
             endcase
