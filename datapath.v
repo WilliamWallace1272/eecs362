@@ -8,14 +8,14 @@ module datapath (input clk, output [0:31] instruction);
     wire branch, jump, zero;
     wire regwr, regdst, extop, alusrc, memwr, memtoreg, linkjmp;
     wire [0:1]  data_size;
-    wire [0:5]  rs, rt, rd, rw1, rw2;
+    wire [0:4]  rs, rt, rd, rw1, rw2;
     wire [0:31] busA1, busA2, busB1, busB2, busW1, busW2;
-    wire [0:31] imm_ext, b_or_imm, alu_out, mem_out;
+    wire [0:31] imm_ext, b_or_imm, alu_out, mem_out, pc_plus_four;
     wire [0:5]  alu_ctrl;
     wire [0:8]  ctrl_signals;
 
     inst_fetch INST_FETCH(.branch(branch), .jump(jump), .zero(zero), .instruction(instr),
-                          .clk(clk), .pc_plus_four(pc_plus_four), .reg_jmp(rs));
+                          .clk(clk), .pc_plus_four(pc_plus_four), .reg_jmp(busA1));
     reg_file REG_FILE(.clk(clk), .we(regwr), .wrAddr(rw1), .wrData(busW2), .rdAddrA(rs), 
                       .rdDataA(busA1), .rdAddrB(rt), .rdDataB(busB1));
     alu ALU(.A(busA2), .B(busB2), .func(alu_ctrl), .result(alu_out));
