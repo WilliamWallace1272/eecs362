@@ -21,10 +21,14 @@ module inst_fetch (input branch, input jump, input zero, output [0:31] instructi
     parameter SIZE=4096;
 
     reg [0:31] pc;
-    wire [0: 31] instr, jmp_target, pc_plus_four, sign_ext, br_target, pc_next, pc_or_br;
+    wire [0: 31] instr, jmp_target, pc_plus_four, sign_ext, br_target, pc_next, pc_or_br, norm_jmp;
 
     imem #(.SIZE(8192)) IMEM(.addr(pc), .instr(instr));
-    assign jmp_target = (instr[0:4] == 5'b01000) ? reg_jmp : {pc[0:4], instr[0:25], 2'b00}; //THIS IS MIPS NOT DLX!!!!!!! FIX!!!!!
+
+    adder_n ADDER_JMP_TARGET (.A(pc_plus_four), .B({{6{instr[6]}}, instr[6:31]}), .cin(1'b0), .Sum(norm_jmp));
+    assign jmp_target = (instr[0:4] == 5'b01001) ? reg_jmp : norm_jmp;
+
+
     adder_n ADDER_PLUS_FOUR (.A(pc), .B(32'h4), .cin(1'b0), .Sum(pc_plus_four));
 //    assign pc_plus_four = pc + 4;
     assign sign_ext = {{16{instr[16]}}, instr[16:31]};

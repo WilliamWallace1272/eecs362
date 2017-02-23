@@ -28,7 +28,7 @@ module datapath_test();
 
 
         DATAPATH.INST_FETCH.pc = 32'h1000;
-        #17  $display("branch: %b, jump: %b, zero: %b  \n", DATAPATH.branch, DATAPATH.jump, DATAPATH.zero);
+//        #17  $display("branch: %b, jump: %b, zero: %b  \n", DATAPATH.branch, DATAPATH.jump, DATAPATH.zero);
             
     end
     
@@ -40,7 +40,7 @@ module datapath_test();
             $display("DMEM -> addr: %x, wdata: %x", DATAPATH.alu_out, DATAPATH.busB1);
             $finish;
         end
-        if (instr == 32'h0c00029c)
-            $display("branch: %x, jump: %x, zero: %x, jmp_target: %x\n", DATAPATH.branch, DATAPATH.jump, DATAPATH.zero, DATAPATH.INST_FETCH.jmp_target);
+        if (instr == 32'h0c00029c || instr == 32'h4be00000)
+            $display("branch: %x, jump: %x, zero: %x, jmp_target: %x, reg_jmp: %x\n", DATAPATH.branch, DATAPATH.jump, DATAPATH.zero, DATAPATH.INST_FETCH.jmp_target, DATAPATH.INST_FETCH.reg_jmp);
     end
 endmodule
