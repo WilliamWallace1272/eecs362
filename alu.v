@@ -30,6 +30,8 @@ module alu(A, B, func, result);
                 end
             6'h15: //NOP
                 out = 32'h00000000;
+            6'h16: //lhi
+                out = B;
             6'h20: //ADD
                 begin
                     carry_in = 0;
