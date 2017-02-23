@@ -36,7 +36,7 @@ module datapath (input clk, output [0:31] instruction);
     assign jump     = ctrl_signals[6];
     assign linkjmp  = ctrl_signals[8];
 
-    assign zero = (instr[31] == (| busA1));
+    assign zero = (instr[5] == (| busA1));
     assign imm_ext = {{16{instr[16] & extop}} , instr[16:31]};
     assign rw1 = regdst ? rd : rt;
     assign rw2 = linkjmp ? 6'b111111 : rw1;
@@ -46,15 +46,15 @@ module datapath (input clk, output [0:31] instruction);
     assign busW1 = memtoreg ? mem_out : alu_out;
     assign data_size = instr[4:5];
     assign busW2 = memtoreg ?
-                        instr[29] ?
-                            instr[30] ?
+                        instr[3] ?
+                            instr[4] ?
                                 busW1 //should actually load fp's which we're ignoring
-                                : instr[31] ?
+                                : instr[5] ?
                                     {{16{1'b0}}, busW1[16:31]}
                                     : {{24{1'b0}}, busW1[24:31]}
-                            : instr[30] ?
+                            : instr[4] ?
                                 busW1
-                                : instr[31] ?
+                                : instr[5] ?
                                     {{16{busW1[16]}}, busW1[16:31]}
                                     : {{24{busW1[24]}}, busW1[24:31]}
                         : busW1;                            

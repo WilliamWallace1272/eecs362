@@ -1,8 +1,8 @@
 module datapath_test();
     wire [0:31] instr;
     reg clk;
-    parameter IMEMFILE = "fib_inst.hex";
-    parameter DMEMFILE = "fib_data.hex";
+    parameter IMEMFILE = "quick_inst.hex";
+    parameter DMEMFILE = "quick_data.hex";
     reg [8*80-1:0] filename;
     integer i; 
 
@@ -27,12 +27,20 @@ module datapath_test();
         $readmemh(filename, DATAPATH.DMEM.mem);
 
 
-        DATAPATH.INST_FETCH.pc = 32'h0;
-        #0  $display("memwr: %b, data_size: %b  \n", DATAPATH.memwr, DATAPATH.DMEM.dsize);
+        DATAPATH.INST_FETCH.pc = 32'h1000;
+        #17  $display("branch: %b, jump: %b, zero: %b  \n", DATAPATH.branch, DATAPATH.jump, DATAPATH.zero);
             
     end
     
 
-    always
+    always begin
         #1 clk = ~clk;
+        if (instr == 32'h44000300)
+        begin
+            $display("DMEM -> addr: %x, wdata: %x", DATAPATH.alu_out, DATAPATH.busB1);
+            $finish;
+        end
+        if (instr == 32'h0c00029c)
+            $display("branch: %x, jump: %x, zero: %x, jmp_target: %x\n", DATAPATH.branch, DATAPATH.jump, DATAPATH.zero, DATAPATH.INST_FETCH.jmp_target);
+    end
 endmodule
