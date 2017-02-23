@@ -13,7 +13,8 @@ rshift_test:
 mult_test:
 	iverilog mult.v tests/mult_test.v -o run_mult;
 
-
+datapath_test:
+	iverilog datapath.v adder.v mult.v alu.v control.v inst_fetch.v reg_file.v tests/datapath_test.v -o run_datapath;
 
 
 clean:
