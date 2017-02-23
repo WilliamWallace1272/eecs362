@@ -3,7 +3,7 @@
 module control(op_code, func_code, ctrl_signals, alu_ctrl);
     input [0:5] op_code;
     input [0:5] func_code;
-    output [0:8] ctrl_signals;
+    output [0:8] ctrl_signals; // 0 RegDst 1ALUSrc 2MemtoReg 3RegWrite 4MemWrite 5Branch 6Jump 7ExtOp 8JReg
     output [0:5] alu_ctrl;
 
 
