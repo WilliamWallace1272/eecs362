@@ -16,14 +16,15 @@ endmodule // imem
 
 
 
-module inst_fetch (input branch, input jump, input zero, output instruction, input clk);
+module inst_fetch (input branch, input jump, input zero, output [0:31] instruction, 
+                   input clk, output [0:31] pc_plus_four, input [0:31] reg_jmp);
     parameter SIZE=4096;
 
     reg [0:31] pc;
     wire [0: 31] instr, jmp_target, pc_plus_four, sign_ext, br_target, pc_next, pc_or_br;
 
     imem #(.SIZE(SIZE)) IMEM(.addr(pc), .instr(instr));
-    assign jmp_target = {pc[0:4], instr[0:25], 2'b00};
+    assign jmp_target = (instr[0:4] == 5'b01000) ? reg_jmp : {pc[0:4], instr[0:25], 2'b00};
     adder_n ADDER_PLUS_FOUR (.A(pc), .B(32'h4), .cin(1'b0), .Sum(pc_plus_four));
 //    assign pc_plus_four = pc + 4;
     assign sign_ext = {{14{instr[0]}}, instr[0:15], 2'b00};
