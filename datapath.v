@@ -44,7 +44,7 @@ module datapath (input clk, output [0:31] instruction);
     assign b_or_imm = alusrc ? imm_ext : busB1;
     assign busB2 = linkjmp ? 32'h00000004 : b_or_imm;
     assign busW1 = memtoreg ? mem_out : alu_out;
-    assign data_size = instr[30:31];
+    assign data_size = instr[4:5];
     assign busW2 = memtoreg ?
                         instr[29] ?
                             instr[30] ?
