@@ -6,7 +6,7 @@ module datapath (input clk, output [0:31] instruction);
     assign instruction = instr;
 
     wire branch, jump, zero;
-    wire regwr, regdst, extop, alusrc, memwr, memtoreg;
+    wire regwr, regdst, extop, alusrc, memwr, memtoreg, linkjmp;
     wire [0:1]  data_size;
     wire [0:5]  rs, rt, rd, rw1, rw2;
     wire [0:31] busA1, busA2, busB1, busB2, busW1, busW2;
@@ -21,6 +21,16 @@ module datapath (input clk, output [0:31] instruction);
     alu ALU(.A(busA2), .B(busB2), .func(alu_ctrl), .result(alu_out));
     dmem DMEM(.addr(alu_out), .rData(mem_out), .wData(busB2), .writeEnable(memwr), .dsize(data_size), .clk(clk));
     control CONTROL(.op_code(instr[0:5]), .func_code(instr[26:31]), .ctrl_signals(ctrl_signals), .alu_ctrl(alu_ctrl));
+
+    assign regwr    = ctrl_signals[3];
+    assign regdst   = ctrl_signals[0];
+    assign extop    = ctrl_signals[7];
+    assign alusrc   = ctrl_signals[1];
+    assign memwr    = ctrl_signals[4];
+    assign memtoreg = ctrl_signals[2];
+    assign branch   = ctrl_signals[5];
+    assign jump     = ctrl_signals[6];
+    assign linkjmp  = ctrl_signals[8];
 
     assign zero = (instr[31] == (| busA1));
     assign imm_ext = {{16{instr[16] & extop}} , instr[16:31]};
