@@ -1,17 +1,17 @@
-module mult_test();
-    reg [31:0] instruction;
+module datapath_test();
+    wire [0:31] instr;
     reg clk;
-    parameter IMEMFILE = "instr.hex";
-    parameter DMEMFILE = "data.hex";
+    parameter IMEMFILE = "fib_inst.hex";
+    parameter DMEMFILE = "fib_data.hex";
     reg [8*80-1:0] filename;
-    
+    integer i; 
 
     datapath DATAPATH (
         .clk(clk),
-        .instruction(instruction));
+        .instruction(instr));
 
     initial begin
-       $monitor("the instruction is %x", instruction);
+       $monitor("the instruction is %x\n", instr);
         for (i = 0; i < DATAPATH.DMEM.SIZE; i = i+1)  
             DATAPATH.DMEM.mem[i] = 8'h00;
 
@@ -27,6 +27,7 @@ module mult_test();
 
 
         DATAPATH.INST_FETCH.pc = 32'h0;
+        #2 $display("ALU result: %x \n", DATAPATH.alu_out);
     end
     
 
