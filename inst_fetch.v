@@ -27,7 +27,7 @@ module inst_fetch (input branch, input jump, input zero, output [0:31] instructi
     assign jmp_target = (instr[0:4] == 5'b01000) ? reg_jmp : {pc[0:4], instr[0:25], 2'b00};
     adder_n ADDER_PLUS_FOUR (.A(pc), .B(32'h4), .cin(1'b0), .Sum(pc_plus_four));
 //    assign pc_plus_four = pc + 4;
-    assign sign_ext = {{14{instr[0]}}, instr[0:15], 2'b00};
+    assign sign_ext = {{16{instr[16]}}, instr[16:31]};
     adder_n ADDER_BR_TARGET (.A(pc_plus_four), .B(sign_ext), .cin(1'b0), .Sum(br_target));
 //    assign br_target = pc_plus_four + sign_ext;
     assign pc_or_br = (branch && zero) ? br_target : pc_plus_four;

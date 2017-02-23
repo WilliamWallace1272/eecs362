@@ -7,6 +7,13 @@ module reg_file (input clk, input we, input [0:4] wrAddr, input [0:31] wrData,
 
     assign rdDataA = regfile[rdAddrA];
     assign rdDataB = regfile[rdAddrB];
+    
+    integer i;
+    initial begin
+        for (i = 0; i < 32; i = i + 1)
+            regfile[i] = 32'h00000000;
+    end
+
 
     always @(posedge clk) begin
         if (we)

@@ -11,6 +11,7 @@ module datapath_test();
         .instruction(instr));
 
     initial begin
+        clk = 0;
        $monitor("the instruction is %x\n", instr);
         for (i = 0; i < DATAPATH.DMEM.SIZE; i = i+1)  
             DATAPATH.DMEM.mem[i] = 8'h00;
@@ -27,7 +28,20 @@ module datapath_test();
 
 
         DATAPATH.INST_FETCH.pc = 32'h0;
-        #2 $display("ALU result: %x \n", DATAPATH.alu_out);
+        #0  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #1  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("ALU result: %x, busA: %x, busB: %x, busW: %x, rw: %x  \n", DATAPATH.alu_out, DATAPATH.busA2, DATAPATH.busB2, DATAPATH.busW2, DATAPATH.rw2);
+        #2  $display("branch: %x, jump: %x, zero: %x, br_target: %x, pc_or_br: %x  \n", DATAPATH.branch, DATAPATH.jump, DATAPATH.zero, DATAPATH.INST_FETCH.br_target, DATAPATH.INST_FETCH.sign_ext);
+            
     end
     
 

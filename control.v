@@ -7,10 +7,8 @@ module control(op_code, func_code, ctrl_signals, alu_ctrl);
     output [0:5] alu_ctrl;
 
 
-    reg  temp_alu_ctrl, temp_ctrl_signals;
-    reg [0:31] adder_B, out;
-    wire [0:31] lshift, rshift, adder_result;
-    wire carry_out;
+    reg [0:5] temp_alu_ctrl; 
+    reg [0:8] temp_ctrl_signals;
 
 
     always @* begin
