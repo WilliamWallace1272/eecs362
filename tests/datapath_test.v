@@ -35,6 +35,10 @@ module datapath_test();
 
     always begin
         #1 clk = ~clk;
+        if (clk == 1'b0)
+        begin
+            $display("op: %x, func: %x, ctrl: %b", DATAPATH.instr[0:4], DATAPATH.instr[26:31], DATAPATH.ctrl_signals);  
+        end
         if (instr == 32'h44000300)
         begin
             $display("DMEM -> addr: %x, wdata: %x", DATAPATH.alu_out, DATAPATH.busB1);
