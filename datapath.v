@@ -19,8 +19,10 @@ module datapath (input clk, output [0:31] instruction);
     reg_file REG_FILE(.clk(clk), .we(regwr), .wrAddr(rw2), .wrData(busW2), .rdAddrA(rs), 
                       .rdDataA(busA1), .rdAddrB(rt), .rdDataB(busB1));
     alu ALU(.A(busA2), .B(busB2), .func(alu_ctrl), .result(alu_out));
-    dmem DMEM(.addr(alu_out), .rData(mem_out), .wData(busB1), .writeEnable(memwr), .dsize(data_size), .clk(clk));
-    control CONTROL(.op_code(instr[0:5]), .func_code(instr[26:31]), .ctrl_signals(ctrl_signals), .alu_ctrl(alu_ctrl));
+    dmem DMEM(.addr(alu_out), .rData(mem_out), .wData(busB1), .writeEnable(memwr), 
+              .dsize(data_size), .clk(clk));
+    control CONTROL(.op_code(instr[0:5]), .func_code(instr[26:31]), .ctrl_signals(ctrl_signals), 
+                    .alu_ctrl(alu_ctrl));
 
     assign rs = instr[6:10];
     assign rt = instr[11:15];
@@ -50,13 +52,13 @@ module datapath (input clk, output [0:31] instruction);
                             instr[4] ?
                                 busW1 //should actually load fp's which we're ignoring
                                 : instr[5] ?
-                                    {{16{1'b0}}, busW1[16:31]}
-                                    : {{24{1'b0}}, busW1[24:31]}
+                                    {{16{1'b0}}, busW1[0:15]}
+                                    : {{24{1'b0}}, busW1[0:7]}
                             : instr[4] ?
                                 busW1
                                 : instr[5] ?
-                                    {{16{busW1[16]}}, busW1[16:31]}
-                                    : {{24{busW1[24]}}, busW1[24:31]}
+                                    {{16{busW1[0]}}, busW1[0:15]}
+                                    : {{24{busW1[0]}}, busW1[0:7]}
                         : busW1;                            
 
 
