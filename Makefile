@@ -16,6 +16,20 @@ mult_test:
 datapath_test:
 	iverilog datapath.v adder.v mult.v alu.v control.v inst_fetch.v reg_file.v tests/datapath_test.v -o run_datapath;
 
+ID:
+	iverilog ID.v control.v reg_file.v adder.v
+
+EX:
+	iverilog EX.v alu.v adder.v
+
+MEM: 
+	iverilog MEM.v alu.v adder.v
+
+WB:
+	iverilog WB.v
+
+IF:
+	iverilog IF.v adder.v
 
 clean:
 	rm -f run* a.out;
