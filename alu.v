@@ -85,7 +85,7 @@ module alu(A, B, func, result);
                 begin
                     carry_in = 1;
                     adder_B = ~B;
-                    if(~adder_result[0])
+                    if(~adder_result[0] && (| adder_result))
                         out = 32'h00000001;
                     else
                         out = 32'h00000000;
