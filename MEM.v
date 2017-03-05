@@ -18,6 +18,7 @@ module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_o
             alu_out_reg <= alu_out;
             dmem_info_reg <= dmem_info;
             write_reg_reg <= write_reg;
+            mem_out_reg <= mem_out;
         end
     end
 endmodule
