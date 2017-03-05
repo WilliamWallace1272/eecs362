@@ -6,7 +6,7 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
     wire [0:31] busB2;   
     wire [0:31] alu_out;
     
-    assign busB2 = (ctrl[1]) ? busB : imm_ext; 
+    assign busB2 = (ctrl[1]) ? imm_ext : BusB; 
 
 
     alu ALU(.A(busA), .B(busB2), .func(alu_ctrl), .result(alu_out));
