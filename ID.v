@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,input [0:4] WriteReg, input [0:31] WriteData, input [0:31] pc_plus_four,output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [0:31] busB_reg, output [0:31] imm_ext_reg, output [0:2] dmem_info_reg, output jump_or_branch, output [0:31]target, output reg_lock_if, output [0:4] write_reg);
+module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,input [0:4] WriteReg, input [0:31] WriteData, input [0:31] pc_plus_four,output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [0:31] busB_reg, output [0:31] imm_ext_reg, output [0:2] dmem_info_reg, output jump_or_branch, output [0:31]target, output reg_lock_if, output [0:4] write_reg, output [0:4] regA, output [0:4] regB);
    // regwrite is from mem/wb register
    
     wire [0:8] ctrl_signals;
@@ -46,7 +46,7 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
     reg [0:8] ctrl_reg;
     reg [0:5] alu_ctrl_reg;
     reg [0:31] busA_reg, busB_reg, imm_ext_reg;
-    reg [0:4] write_reg;
+    reg [0:4] write_reg, regA, regB;
     wire [0:31] temp_count;
     adder_n ADDER_1(.A(counter), .B(-1), .cin(0), .Sum(temp_count));
     always @(posedge clk) begin
@@ -66,6 +66,8 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
                 alu_ctrl_reg <= alu_ctrl;
                 busA_reg <= busA1; // pure A and B registers
                 busB_reg <= busB1;
+                regA <= rs;
+                regB <= rt;
                 imm_ext_reg <= imm_ext;
                 dmem_info_reg <= dmem_info;
                 write_reg <= 5'b11111;
@@ -79,6 +81,8 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
                 alu_ctrl_reg <= 6'h15;
                 busA_reg <= busA1; // pure A and B registers
                 busB_reg <= busB1;
+                regA <= rs;
+                regB <= rt;
                 imm_ext_reg <= imm_ext; // if control is all 0 than we should be good
                 dmem_info_reg <= dmem_info;
                 write_reg <= 5'b00000;
@@ -92,6 +96,8 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
                 alu_ctrl_reg <= alu_ctrl;
                 busA_reg <= busA1; // pure A and B registers
                 busB_reg <= busB1;
+                regA <= rs;
+                regB <= rt;
                 imm_ext_reg <= imm_ext;
                 dmem_info_reg <= dmem_info;
                 write_reg <= rw1;

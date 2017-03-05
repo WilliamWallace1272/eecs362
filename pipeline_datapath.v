@@ -10,7 +10,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
                 write_data_wb,
                 imm_ext_id;
     wire [0:5] alu_ctrl_id;
-    wire [0:4] write_reg_wb, write_reg_id, write_reg_ex, write_reg_mem; 
+    wire [0:4] write_reg_wb, write_reg_id, write_reg_ex, write_reg_mem, regA_id, regB_id; 
     wire [0:8] ctrl_id, ctrl_ex, ctrl_mem;
     wire [0:2] dmem_info_id, dmem_info_ex, dmem_info_mem;
      
@@ -40,7 +40,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
         //outputs
         .ctrl_reg(ctrl_id), .alu_ctrl_reg(alu_ctrl_id), .busA_reg(busA_id),.busB_reg(busB_id), 
         .imm_ext_reg(imm_ext_id), .dmem_info_reg(dmem_info_id),.jump_or_branch(jump_or_branch_id) , 
-        .target(target_id), .reg_lock_if(reg_lock_if1), .write_reg(write_reg_id));
+        .target(target_id), .reg_lock_if(reg_lock_if1), .write_reg(write_reg_id), .regA(regA_id), .regB(regB_id));
         
 
 
@@ -48,7 +48,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
         //inputs
         .clk(clk), .reg_lock(reg_lock_ex), .ctrl(ctrl_id), .alu_ctrl(alu_ctrl_id), 
         .busA(busA_id), .busB(busB_id), .imm_ext(imm_ext_id), .dmem_info(dmem_info_id),.write_reg(write_reg_id), 
-        .write_reg_mem(write_reg_ex), .write_val_mem(alu_out_ex), .write_reg_wb(write_reg_mem), .write_val_wb(write_data_wb), 
+        .write_reg_mem(write_reg_ex), .write_val_mem(alu_out_ex), .write_reg_wb(write_reg_mem), .write_val_wb(write_data_wb), .regA(regA_id), .regB(regB_id), 
         //outputs
         .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex));
 
