@@ -19,7 +19,7 @@ endmodule // imem
 module i_fetch (input clk, input reg_lock, input [0:31] target , input jump_or_branch, output [0:31] instr, output [0:31] pc_plus_four);
     parameter SIZE=4096;
 
-    wire [0:31] instruction, plus_four;
+    wire [0:31] instruction, plus_four, pc_next;
 
     imem #(.SIZE(8192)) IMEM(.addr(pc), .instr(instruction));
 

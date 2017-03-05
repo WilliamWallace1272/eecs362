@@ -14,7 +14,21 @@ module pipeline_datapath (input clk, output [0:31] instr);
     wire [0:8] ctrl_id, ctrl_ex, ctrl_mem;
     wire [0:2] dmem_info_id, dmem_info_ex, dmem_info_mem;
      
-    wire reg_lock_if, reg_lock_if1,reg_lock_id, reg_lock_ex, reg_lock_mem, reg_lock_wb, jump_or_branch_id;
+    //should be wires once connected
+    wire reg_lock_if, reg_lock_if1;
+    reg reg_lock_id, reg_lock_ex, reg_lock_mem, reg_lock_wb;
+    wire jump_or_branch_id;
+
+    initial begin
+     //   reg_lock_if <= 0;
+        reg_lock_id <= 0;
+        reg_lock_ex <= 0;
+        reg_lock_mem <= 0;
+        reg_lock_wb <= 0;
+    end
+         
+
+
 
     i_fetch I_FETCH(.clk(clk),.reg_lock(reg_lock_if), .target(target_id), .jump_or_branch(jump_or_branch_id), .instr(instruction), .pc_plus_four(pc_plus_four_if));
    
