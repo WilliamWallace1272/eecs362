@@ -34,6 +34,7 @@ IF:
 pipeline:
 	iverilog alu.v ID.v EX.v MEM.v WB.v IF.v control.v reg_file.v adder.v -o pipeline
 
-
+pipeline_test:
+	iverilog pipeline_datapath.v alu.v ID.v EX.v MEM.v WB.v IF.v control.v reg_file.v adder.v tests/pipeline_test.v -o run_pipeline
 clean:
 	rm -f run* a.out;
