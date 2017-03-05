@@ -54,10 +54,29 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
         begin
             if (instruction[0:5] == 6'h03)
                 begin
-                    assign counter = 32'h00000003;
-                    assign reg_lock_if = 1;
+                    counter <= 32'h00000003;
+                    reg_lock_if <= 1;
                 end
-            
+            else if(instruction[0:2] == 3'b100)
+            begin
+                    counter <= 32'h0000000a;
+                    reg_lock_if <= 1;
+            end
+
+            if (counter == 32'h0000000a)
+            begin
+                counter <= 1;
+                ctrl_reg <= ctrl_signals;
+                alu_ctrl_reg <= alu_ctrl;
+                busA_reg <= busA1; // pure A and B registers
+                busB_reg <= busB1;
+                regA <= rs;
+                regB <= rt;
+                imm_ext_reg <= imm_ext;
+                dmem_info_reg <= dmem_info;
+                write_reg <= rw1;
+            end
+
             if (counter == 3) //initial
             begin
             
