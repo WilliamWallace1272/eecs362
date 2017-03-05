@@ -1,17 +1,32 @@
 `timescale 1ns / 1ps
 
-module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl, input [0:31] busA, input [0:31] busB, input [0:31] imm_ext, input [0:2] dmem_info, input [0:4] write_reg,  output [0:8] ctrl_reg, output [0:31] alu_out_reg, output [0:31] write_data_reg, output [0:2] dmem_info_reg, output [0:4] write_reg_reg);
+module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl, input [0:31] busA, input [0:31] busB, input [0:31] imm_ext, input [0:2] dmem_info, input [0:4] write_reg, input [0:4] write_reg_mem, input [0:31] write_val_mem, input [0:4] write_reg_wb, input [0:31] write_val_wb, input [0:4] regA, input [0:4] regB,  output [0:8] ctrl_reg, output [0:31] alu_out_reg, output [0:31] write_data_reg, output [0:2] dmem_info_reg, output [0:4] write_reg_reg);
     
    
     wire [0:31] busB2;   
     wire [0:31] alu_out;
+    wire [0:31] busA_forward, busB_forward;
+    wire fwdA_mem, fwdA_wb, fwdB_mem, fwdB_wb;
     
-    assign busB2 = (ctrl[1]) ? imm_ext : busB; 
+    assign busB2 = (ctrl[1]) ? imm_ext : busB_forward; 
 
+    assign fwdA_mem = (regA == write_reg_mem) ? 1 : 0;
+    assign fwdA_wb  = (regA == write_reg_wb)  ? 1 : 0;
+    assign fwdB_mem = (regB == write_reg_mem) ? 1 : 0;
+    assign fwdB_wb  = (regB == write_reg_wb)  ? 1 : 0;
 
-    alu ALU(.A(busA), .B(busB2), .func(alu_ctrl), .result(alu_out));
+    assign busA_forward = fwdA_mem ? write_val_mem
+                                   : fwdA_wb ? write_val_wb
+                                             : busA;
+
+    assign busB_forward = fwdB_mem ? write_val_mem
+                                   : fwdB_wb ? write_val_wb
+                                             : busB;
+
+    alu ALU(.A(busA_forward), .B(busB2), .func(alu_ctrl), .result(alu_out));
     
-
+    
+    
 
     reg [0:8] ctrl_reg;
     reg [0:31] alu_out_reg;
