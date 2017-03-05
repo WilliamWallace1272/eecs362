@@ -10,7 +10,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
                 write_data_wb,
                 imm_ext_id;
     wire [0:5] alu_ctrl_id;
-    wire [0:4] write_reg_wb; 
+    wire [0:4] write_reg_wb, write_reg_id, write_reg_ex, write_reg_mem; 
     wire [0:8] ctrl_id, ctrl_ex, ctrl_mem;
     wire [0:2] dmem_info_id, dmem_info_ex, dmem_info_mem;
      
@@ -26,30 +26,30 @@ module pipeline_datapath (input clk, output [0:31] instr);
         //outputs
         .ctrl_reg(ctrl_id), .alu_ctrl_reg(alu_ctrl_id), .busA_reg(busA_id),.busB_reg(busB_id), 
         .imm_ext_reg(imm_ext_id), .dmem_info_reg(dmem_info_id),.jump_or_branch(jump_or_branch_id) , 
-        .target(target_id), .reg_lock_if(reg_lock_if1));
+        .target(target_id), .reg_lock_if(reg_lock_if1), .write_reg(write_reg_id));
         
 
 
     execute EXECUTE (
         //inputs
         .clk(clk), .reg_lock(reg_lock_ex), .ctrl(ctrl_id), .alu_ctrl(alu_ctrl_id), 
-        .busA(busA_id), .busB(busB_id), .imm_ext(imm_ext_id), .dmem_info(dmem_info_id), 
+        .busA(busA_id), .busB(busB_id), .imm_ext(imm_ext_id), .dmem_info(dmem_info_id),.write_reg(write_reg_id), 
         //outputs
-        .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), .dmem_info_reg(dmem_info_ex));
+        .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex));
 
     mem_stage MEM_STAGE (
         //inputs
         .clk(clk), .reg_lock(reg_lock_mem), .ctrl(ctrl_ex), .alu_out(alu_out_ex), .write_data(write_mem_ex),
-        .dmem_info(dmem_info_ex),
+        .dmem_info(dmem_info_ex), .write_reg(write_reg_ex),
         //outputs
-        .ctrl_reg(ctrl_mem), .mem_out_reg(mem_out_mem), .alu_out_reg(alu_out_mem), .dmem_info_reg(dmem_info_mem));
+        .ctrl_reg(ctrl_mem), .mem_out_reg(mem_out_mem), .alu_out_reg(alu_out_mem), .dmem_info_reg(dmem_info_mem),.write_reg_reg(write_reg_mem));
 
     write_back WRITE_BACK (
         //inputs 
         .clk(clk), .ctrl(ctrl_mem), .mem_out(mem_out_mem), .alu_out(alu_out_mem), 
-        .dmem_info(dmem_info_mem),
+        .dmem_info(dmem_info_mem), .write_reg(write_reg_mem),
         //outputs
-        .write_data(write_data_wb), .write_reg(write_reg_wb), .reg_write(reg_write_wb));
+        .write_data(write_data_wb), .write_reg_wb(write_reg_wb), .reg_write(reg_write_wb));
     
     
 
