@@ -4,7 +4,7 @@ module write_back (input clk, input [0:8] ctrl, input [0:31] mem_out, input [0:3
    
 
     assign reg_write = ctrl[3];
-    
+        
     assign write_data = ctrl[2] ?
                         dmem_info[0] ?
                             dmem_info[1] ?
