@@ -48,6 +48,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
         //inputs
         .clk(clk), .reg_lock(reg_lock_ex), .ctrl(ctrl_id), .alu_ctrl(alu_ctrl_id), 
         .busA(busA_id), .busB(busB_id), .imm_ext(imm_ext_id), .dmem_info(dmem_info_id),.write_reg(write_reg_id), 
+        .write_reg_mem(write_reg_ex), .write_val_mem(alu_out_ex), .write_reg_wb(write_reg_mem), .write_val_wb(write_data_wb), 
         //outputs
         .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex));
 
