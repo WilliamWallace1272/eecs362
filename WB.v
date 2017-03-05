@@ -1,9 +1,9 @@
 `timescale 1ns / 1ps
 
-module write_back (input clk, input reg_lock, input [0:8] ctrl, input [0:31] mem_out, input [0:31] alu_out, input [0:2] dmem_info, output [0:31] write_data, output[0:4] write_reg);  
+module write_back (input clk, input [0:8] ctrl, input [0:31] mem_out, input [0:31] alu_out, input [0:2] dmem_info, output [0:31] write_data, output[0:4] write_reg, output reg_write);  
    
 
-    
+    assign reg_write = ctrl[3];
     assign write_data = ctrl[2] ?
                         dmem_info[0] ?
                             dmem_info[1] ?

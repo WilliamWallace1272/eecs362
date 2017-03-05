@@ -31,5 +31,9 @@ WB:
 IF:
 	iverilog IF.v adder.v
 
+pipeline:
+	iverilog alu.v ID.v EX.v MEM.v WB.v IF.v control.v reg_file.v adder.v -o pipeline
+
+
 clean:
 	rm -f run* a.out;
