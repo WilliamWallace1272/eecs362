@@ -13,7 +13,7 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
     assign instruction = instr;
     control CONTROL(.op_code(instr[0:5]), .func_code(instr[26:31]), .ctrl_signals(ctrl_signals), .alu_ctrl(alu_ctrl));
 
-    reg_file REG_FILE(.clk(clk), .we(RegWrite), .wrAddr(WriteReg),.wrData(WriteData), .rdAddrA(rs), 
+    reg_file REG_FILE(.clk(clk), .we(we), .wrAddr(WriteReg),.wrData(WriteData), .rdAddrA(rs), 
                                 .rdDataA(busA1), .rdAddrB(rt), .rdDataB(busB1));
     wire [0:31] jmp_target, branch_target, norm_jmp, target;
     wire zero, jump_or_branch;
