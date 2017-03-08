@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
 
-module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,input [0:4] WriteReg, input [0:31] WriteData, input [0:31] pc_plus_four,output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [0:31] busB_reg, output [0:31] imm_ext_reg, output [0:2] dmem_info_reg, output jump_or_branch, output [0:31]target, output reg_lock_if, output [0:4] write_reg, output [0:4] regA, output [0:4] regB);
+module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,input [0:4] WriteReg, input [0:31] WriteData, input [0:31] pc_plus_four, input [0:4] write_reg_ex, input [0:4] write_reg_mem, input [0:31] write_val_ex, input [0:31] write_val_mem, 
+output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [0:31] busB_reg, output [0:31] imm_ext_reg, output [0:2] dmem_info_reg, output jump_or_branch, output [0:31]target, output reg_lock_if, output [0:4] write_reg, output [0:4] regA, output [0:4] regB);
    // regwrite is from mem/wb register
    
     wire [0:8] ctrl_signals;
@@ -21,10 +22,18 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
     
     adder_n ADDER_BRANCH_TARGET(.A(pc_plus_four), .B({{16{instruction[16]}}, instruction[16:31]}), .cin(1'b0), .Sum(branch_target));
 
-    assign jmp_target = (instruction[0:4] == 5'b01001) ? busA1 : norm_jmp;
+
+    wire [0:31] jmp_bus;
+    wire fwd_br_ex, fwd_br_mem;
+    assign fwd_br_ex = (rs == write_reg_ex) ? 1 : 0;
+    assign fwd_br_mem = (rs == write_reg_mem) ? 1 : 0;
+    assign jmp_bus = write_reg_ex ? write_val_ex
+                                  : write_reg_mem ? write_val_mem
+                                                  : busA1;
+    assign jmp_target = (instruction[0:4] == 5'b01001) ? jmp_bus : norm_jmp;
     assign target = ctrl_signals[6] ? jmp_target : branch_target;
     assign jump_or_branch = ctrl_signals[6] || (ctrl_signals[5] && zero);
-    assign zero = (instruction[5] == (|busA1));
+    assign zero = (instruction[5] == (|jmp_bus));
 
 
     assign dmem_info = instruction[3:5]; // dmem_info 0 is un/signed load. bits 1 and 2 are for size; 
