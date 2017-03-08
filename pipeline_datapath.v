@@ -2,14 +2,14 @@ module pipeline_datapath (input clk, output [0:31] instr);
    
     assign instr = instruction;
     wire [0:31] instruction, pc_plus_four_id, pc_plus_four_if,
-                alu_out_mem,alu_out_ex, 
+                alu_out_mem,alu_out_ex,mult_out_ex, 
                 mem_out_mem,
                 write_mem_ex,
                 busA_id, busB_id, 
                 target_id,
                 write_data_wb,
                 imm_ext_id;
-    wire [0:5] alu_ctrl_id;
+    wire [0:5] alu_ctrl_id, alu_ctrl_ex;
     wire [0:4] write_reg_wb, write_reg_id, write_reg_ex, write_reg_mem, regA_id, regB_id; 
     wire [0:8] ctrl_id, ctrl_ex, ctrl_mem;
     wire [0:2] dmem_info_id, dmem_info_ex, dmem_info_mem;
@@ -50,12 +50,12 @@ module pipeline_datapath (input clk, output [0:31] instr);
         .busA(busA_id), .busB(busB_id), .imm_ext(imm_ext_id), .dmem_info(dmem_info_id),.write_reg(write_reg_id), 
         .write_reg_mem(write_reg_ex), .write_val_mem(alu_out_ex), .write_reg_wb(write_reg_mem), .write_val_wb(write_data_wb), .regA(regA_id), .regB(regB_id), 
         //outputs
-        .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex));
+        .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex), .mult_out_reg(mult_out_ex), .alu_ctrl_reg(alu_ctrl_ex));
 
     mem_stage MEM_STAGE (
         //inputs
         .clk(clk), .reg_lock(reg_lock_mem), .ctrl(ctrl_ex), .alu_out(alu_out_ex), .write_data(write_mem_ex),
-        .dmem_info(dmem_info_ex), .write_reg(write_reg_ex),
+        .dmem_info(dmem_info_ex), .write_reg(write_reg_ex), .mult_out(mult_out_ex), .alu_ctrl(alu_ctrl_ex),
         //outputs
         .ctrl_reg(ctrl_mem), .mem_out_reg(mem_out_mem), .alu_out_reg(alu_out_mem), .dmem_info_reg(dmem_info_mem),.write_reg_reg(write_reg_mem));
 

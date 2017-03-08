@@ -20,7 +20,7 @@ ID:
 	iverilog ID.v control.v reg_file.v adder.v
 
 EX:
-	iverilog EX.v alu.v adder.v
+	iverilog EX.v mult.v alu.v adder.v
 
 MEM: 
 	iverilog MEM.v alu.v adder.v
@@ -32,9 +32,9 @@ IF:
 	iverilog IF.v adder.v
 
 pipeline:
-	iverilog alu.v ID.v EX.v MEM.v WB.v IF.v control.v reg_file.v adder.v -o pipeline
+	iverilog alu.v ID.v mult.v EX.v MEM.v WB.v IF.v control.v reg_file.v adder.v -o pipeline
 
 pipeline_test:
-	iverilog pipeline_datapath.v alu.v ID.v EX.v MEM.v WB.v IF.v control.v reg_file.v adder.v tests/pipeline_test.v -o run_pipeline
+	iverilog mult.v pipeline_datapath.v alu.v ID.v EX.v MEM.v WB.v IF.v control.v reg_file.v adder.v tests/pipeline_test.v -o run_pipeline
 clean:
 	rm -f run* a.out;

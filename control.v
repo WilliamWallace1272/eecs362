@@ -20,6 +20,8 @@ module control(op_code, func_code, ctrl_signals, alu_ctrl);
                 end
             6'h01:
                 begin
+                  temp_ctrl_signals = 9'b100100000;
+                  temp_alu_ctrl = func_code; // unsigned 0x16     signed 0x0e
                 end
             6'h02: // j
                 begin
@@ -76,6 +78,8 @@ module control(op_code, func_code, ctrl_signals, alu_ctrl);
                     temp_ctrl_signals = 9'b010010010;
                     temp_alu_ctrl = 6'h20;
                 end
+            
+
             default: 
         ;
             endcase
