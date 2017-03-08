@@ -36,7 +36,9 @@ module pipeline_datapath (input clk, output [0:31] instr);
     i_decode I_DECODE(
         //inputs
         .clk(clk), .reg_lock(reg_lock_id), .instruction(instruction), .we(reg_write_wb), 
-        .WriteReg(write_reg_wb), .WriteData(write_data_wb), .pc_plus_four(pc_plus_four_if), // inputs
+        .WriteReg(write_reg_wb), .WriteData(write_data_wb), .pc_plus_four(pc_plus_four_if),
+        .write_reg_ex(write_reg_id), .write_reg_mem(write_reg_ex), .write_val_ex(alu_non_reg_ex),
+        .write_val_mem(alu_out_ex),
         //outputs
         .ctrl_reg(ctrl_id), .alu_ctrl_reg(alu_ctrl_id), .busA_reg(busA_id),.busB_reg(busB_id), 
         .imm_ext_reg(imm_ext_id), .dmem_info_reg(dmem_info_id),.jump_or_branch(jump_or_branch_id) , 
@@ -50,7 +52,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
         .busA(busA_id), .busB(busB_id), .imm_ext(imm_ext_id), .dmem_info(dmem_info_id),.write_reg(write_reg_id), 
         .write_reg_mem(write_reg_ex), .write_val_mem(alu_out_ex), .write_reg_wb(write_reg_mem), .write_val_wb(write_data_wb), .regA(regA_id), .regB(regB_id), 
         //outputs
-        .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex), .mult_out_reg(mult_out_ex), .alu_ctrl_reg(alu_ctrl_ex));
+        .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex), .mult_out_reg(mult_out_ex), .alu_ctrl_reg(alu_ctrl_ex), .alu_out(alu_non_reg_ex));
 
     mem_stage MEM_STAGE (
         //inputs
