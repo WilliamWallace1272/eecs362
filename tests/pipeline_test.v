@@ -30,7 +30,7 @@ module datapath_test();
         $readmemh(filename, DATAPATH.MEM_STAGE.DMEM.mem);
 
         f = $fopen("output.txt", "w");
-
+        DATAPATH.I_DECODE.counter = 32'h00000000;
         DATAPATH.I_FETCH.pc = 32'h0000;
         DATAPATH.I_FETCH.instr = 32'h00000015;
         #27  $display("opcode: %x r2: %x", instr[0:5], DATAPATH.I_DECODE.REG_FILE.regfile[2]);
