@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl, input [0:31] busA, input [0:31] busB, input [0:31] imm_ext, input [0:2] dmem_info, input [0:4] write_reg, input [0:4] write_reg_mem, input [0:31] write_val_mem, input [0:4] write_reg_wb, input [0:31] write_val_wb, input [0:4] regA, input [0:4] regB,  output [0:8] ctrl_reg, output [0:31] alu_out_reg, output [0:31] write_data_reg, output [0:2] dmem_info_reg, output [0:4] write_reg_reg, output [0:31] mult_out_reg, output [0:5] alu_ctrl_reg);
+module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl, input [0:31] busA, input [0:31] busB, input [0:31] imm_ext, input [0:2] dmem_info, input [0:4] write_reg, input [0:4] write_reg_mem, input [0:31] write_val_mem, input [0:4] write_reg_wb, input [0:31] write_val_wb, input [0:4] regA, input [0:4] regB,  output [0:8] ctrl_reg, output [0:31] alu_out_reg, output [0:31] write_data_reg, output [0:2] dmem_info_reg, output [0:4] write_reg_reg, output [0:31] mult_out_reg, output [0:5] alu_ctrl_reg, output [0:4] write_reg_ex, output [0:31] alu_out);
     
    
     wire [0:31] busB2;   
