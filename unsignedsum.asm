@@ -30,4 +30,6 @@ _loop:
     subi r6, r6, 4
     bnez r6, _loop
     sw _dat(r0), r6
+    sw 0x2004(r0), r5
+    trap 0x300
 .endproc _usum

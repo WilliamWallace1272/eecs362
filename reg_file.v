@@ -15,7 +15,7 @@ module reg_file (input clk, input we, input [0:4] wrAddr, input [0:31] wrData,
     end
 
 
-    always @(posedge clk) begin
+    always @(negedge clk) begin
         if (we)
         begin
             if (wrAddr == 32'h0) 

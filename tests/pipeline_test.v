@@ -1,8 +1,8 @@
 module datapath_test();
     wire [0:31] instr;
     reg clk;
-    parameter IMEMFILE = "unsigned_inst.hex";
-    parameter DMEMFILE = "unsigned_data.hex";
+    parameter IMEMFILE = "unsigned_inst2.hex";
+    parameter DMEMFILE = "unsigned_data2.hex";
     reg [8*80-1:0] filename;
     integer i, j, f; 
 
@@ -55,10 +55,11 @@ module datapath_test();
         if (instr == 32'h44000300)
         begin
             $display("DMEM -> addr: %x, wdata: %x", DATAPATH.alu_out_ex, DATAPATH.busB_id);
-            for(j = 0; j < 100; j = j + 1)
+            #10
+            for(j = 0; j < 10; j = j + 1)
                 $fwrite(f, "%d\n", DATAPATH.MEM_STAGE.DMEM.mem[16'h2000 + j]);
             $fclose(f);
-            #10 $finish;
+            $finish;
         end
         /*
         if (instr[0:5] == 6'h02 || instr[0:5] == 6'h03 || instr[0:5] == 6'h12 || instr[0:5] == 6'h13 || instr[0:5] == 6'h04 || instr[0:5] == 6'h05)

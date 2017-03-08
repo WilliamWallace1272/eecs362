@@ -50,22 +50,31 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
     reg [0:31] busA_reg, busB_reg, imm_ext_reg;
     reg [0:4] write_reg, regA, regB;
     wire [0:31] temp_count;
+    reg [0:31] temp_count2;
     adder_n ADDER_1(.A(counter), .B(-1), .cin(0), .Sum(temp_count));
 
     always @ *
     begin
-        if (instruction[0:5] == 6'h03)
+        if (counter != 0)
         begin
-            counter = 32'h3;
+            temp_count2 = 0;
+            reg_lock_if = 0;
+        end
+        else if (instruction[0:5] == 6'h03)
+        begin
+            temp_count2 = 32'h3;
             reg_lock_if = 1;
         end
         else if (instruction[0:2] == 3'b100)
         begin
-            counter = 32'h0000000a;
+            temp_count2 = 32'h0000000a;
             reg_lock_if = 1;
         end
-        if (counter == 0)
+        else 
+        begin
+            temp_count2 = 0;
             reg_lock_if = 0;
+        end
     end
 
     always @(posedge clk) begin
@@ -82,7 +91,7 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
                     reg_lock_if <= 1;
             end*/
 
-            if (counter == 32'h0000000a)
+            if (temp_count2 == 32'h0000000a)
             begin
                 counter <= 1;
                 ctrl_reg <= ctrl_signals;
@@ -97,10 +106,10 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
                 write_reg <= rw1;
             end
 
-            if (counter == 3) //initial
+            if (temp_count2 == 3) //initial
             begin
             
-                counter = temp_count;
+                counter <= 2;
                 ctrl_reg <= ctrl_signals;
                 alu_ctrl_reg <= alu_ctrl;
                 busA_reg <= busA1; // pure A and B registers
@@ -115,7 +124,7 @@ module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,in
 
             else if (counter > 0) // pass along a nop
             begin
-                counter = temp_count;
+                counter <= temp_count;
                 ctrl_reg <= 9'b000000000;
                 alu_ctrl_reg <= 6'h15;
                 busA_reg <= busA1; // pure A and B registers
