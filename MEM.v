@@ -4,7 +4,7 @@ module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_o
    
     wire [0:31] mem_out;
     wire [0:31] mult_or_alu;
-    dmem DMEM(.addr(alu_out), .rData(mem_out), .wData(write_data), .writeEnable(ctrl_signals[4]), .dsize(dmem_info[1:2]), .clk(clk)); 
+    dmem DMEM(.addr(alu_out), .rData(mem_out), .wData(write_data), .writeEnable(ctrl[4]), .dsize(dmem_info[1:2]), .clk(clk)); 
 
     assign mult_or_alu = (alu_ctrl == 6'h0e || alu_ctrl == 6'h16) ? mult_out : alu_out;
     reg [0:8] ctrl_reg;
