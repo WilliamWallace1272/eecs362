@@ -2,7 +2,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
    
     assign instr = instruction;
     wire [0:31] instruction, pc_plus_four_id, pc_plus_four_if,
-                alu_out_mem,alu_out_ex,mult_out_ex, 
+                alu_out_mem,alu_out_ex,alu_non_reg_ex,mult_out_ex, 
                 mem_out_mem,
                 write_mem_ex,
                 busA_id, busB_id, 
