@@ -1,8 +1,8 @@
 module datapath_test();
     wire [0:31] instr;
     reg clk;
-    parameter IMEMFILE = "quick_inst.hex";
-    parameter DMEMFILE = "quick_data.hex";
+    parameter IMEMFILE = "fib_inst.hex";
+    parameter DMEMFILE = "fib_data.hex";
     reg [8*80-1:0] filename;
     integer i, j, f; 
 
@@ -31,7 +31,7 @@ module datapath_test();
 
         f = $fopen("output.txt", "w");
 
-        DATAPATH.INST_FETCH.pc = 32'h1000;
+        DATAPATH.INST_FETCH.pc = 32'h0000;
         #27  $display("opcode: %x r2: %x", instr[0:5], DATAPATH.REG_FILE.regfile[2]);
             
     end
