@@ -7,7 +7,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     wire [0:8] ctrl_signals;
     wire [0:5] alu_ctrl;
     wire [0:4] rs,rt,rd,rw1,rw2;
-    wire [0:31] busA1, busB1, imm_ext;
+    wire [0:31] busA1, busB1, imm_ext, busA2, busB2;
     wire [0:2] dmem_info;
     
     
@@ -27,8 +27,8 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     wire fwd_br_ex, fwd_br_mem;
     assign fwd_br_ex = (rs == write_reg_ex) ? 1 : 0;
     assign fwd_br_mem = (rs == write_reg_mem) ? 1 : 0;
-    assign jmp_bus = write_reg_ex ? write_val_ex
-                                  : write_reg_mem ? write_val_mem
+    assign jmp_bus = fwd_br_ex ? write_val_ex
+                                  : fwd_br_mem ? write_val_mem
                                                   : busA1;
     assign jmp_target = (instruction[0:4] == 5'b01001) ? jmp_bus : norm_jmp;
     assign target = ctrl_signals[6] ? jmp_target : branch_target;
@@ -41,8 +41,10 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     assign rt = instruction[11:15];
     assign rd = instruction[16:20];
     assign rw1 = ctrl_signals[0] ? rd : rt;
+    assign rw2 = ctrl_signals[8] ? 6'b111111 : rw1;
     
-    
+    assign busA2 = ctrl_signals[8] ? pc_plus_four : busA1;
+    assign busB2 = ctrl_signals[8] ? 32'h04 : busB1;
 
     assign imm_ext = {{16{instruction[16] & ctrl_signals[7]}}, instruction[16:31]};
     
@@ -106,8 +108,8 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                 ctrl_reg <= ctrl_signals;
                 $display("counter is %x", counter);
                 alu_ctrl_reg <= alu_ctrl;
-                busA_reg <= busA1; // pure A and B registers
-                busB_reg <= busB1;
+                busA_reg <= busA2; // pure A and B registers
+                busB_reg <= busB2;
                 regA <= rs;
                 regB <= rt;
                 imm_ext_reg <= imm_ext;
@@ -121,8 +123,8 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                 counter <= 2;
                 ctrl_reg <= ctrl_signals;
                 alu_ctrl_reg <= alu_ctrl;
-                busA_reg <= busA1; // pure A and B registers
-                busB_reg <= busB1;
+                busA_reg <= busA2; // pure A and B registers
+                busB_reg <= busB2;
                 regA <= rs;
                 regB <= rt;
                 imm_ext_reg <= imm_ext;
@@ -136,8 +138,8 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                 counter <= temp_count;
                 ctrl_reg <= 9'b000000000;
                 alu_ctrl_reg <= 6'h15;
-                busA_reg <= busA1; // pure A and B registers
-                busB_reg <= busB1;
+                busA_reg <= busA2; // pure A and B registers
+                busB_reg <= busB2;
                 regA <= rs;
                 regB <= rt;
                 imm_ext_reg <= imm_ext; // if control is all 0 than we should be good
@@ -150,8 +152,8 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
             begin
                 ctrl_reg <= ctrl_signals;
                 alu_ctrl_reg <= alu_ctrl;
-                busA_reg <= busA1; // pure A and B registers
-                busB_reg <= busB1;
+                busA_reg <= busA2; // pure A and B registers
+                busB_reg <= busB2;
                 regA <= rs;
                 regB <= rt;
                 imm_ext_reg <= imm_ext;

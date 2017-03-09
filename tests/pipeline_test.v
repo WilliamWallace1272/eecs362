@@ -1,8 +1,8 @@
 module datapath_test();
     wire [0:31] instr;
     reg clk;
-    parameter IMEMFILE = "fib_inst.hex";
-    parameter DMEMFILE = "fib_data.hex";
+    parameter IMEMFILE = "quick_inst.hex";
+    parameter DMEMFILE = "quick_data.hex";
     reg [8*80-1:0] filename;
     integer i, j, f; 
 
@@ -31,7 +31,7 @@ module datapath_test();
 
         f = $fopen("output.txt", "w");
         DATAPATH.I_DECODE.counter = 32'h00000000;
-        DATAPATH.I_FETCH.pc = 32'h0000;
+        DATAPATH.I_FETCH.pc = 32'h1000;
         DATAPATH.EXECUTE.write_reg_reg = 1;
         DATAPATH.I_DECODE.write_reg= 1;
         DATAPATH.I_FETCH.instr = 32'h00000015;
