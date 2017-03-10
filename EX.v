@@ -49,7 +49,7 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
             ctrl_reg <= ctrl;
             alu_ctrl_reg <= alu_ctrl;
             alu_out_reg <= alu_out;
-            write_data_reg <= busB;
+            write_data_reg <= busB_forward;
             dmem_info_reg <= dmem_info;
             write_reg_reg <= write_reg;
             mult_out_reg <= full_mult_result[32:63];

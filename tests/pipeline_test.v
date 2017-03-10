@@ -43,10 +43,10 @@ module datapath_test();
     always begin
         #1 clk = ~clk;
         j = j + 1;
-        if(j > 100000) 
+        if(j > 10000) 
         begin
             for(j = 0; j < 100; j = j + 1)
-                $fwrite(f, "%d\n", DATAPATH.MEM_STAGE.DMEM.mem[16'h2000 + j]);
+                $fwrite(f, "%x\n", DATAPATH.MEM_STAGE.DMEM.mem[16'h2000 + j]);
             $fclose(f);
             $finish;
         end
