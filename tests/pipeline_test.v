@@ -1,8 +1,8 @@
 module datapath_test();
     wire [0:31] instr;
     reg clk;
-    parameter IMEMFILE = "unsigned_inst2.hex";
-    parameter DMEMFILE = "unsigned_data2.hex";
+    parameter IMEMFILE = "multtest_inst.hex";
+    parameter DMEMFILE = "multtest_data.hex";
     reg [8*80-1:0] filename;
     integer i, j, f; 
 
@@ -68,7 +68,7 @@ module datapath_test();
         begin
             $display("DMEM -> addr: %x, wdata: %x\n", DATAPATH.alu_out_ex, DATAPATH.busB_id);
             $display("The program took %d cycles to complete\n", j/2); 
-            #10
+            #100
             for(j = 0; j < 100; j = j + 1)
             begin
                 $fwrite(f, "%d", DATAPATH.MEM_STAGE.DMEM.mem[16'h2000 + j]);
