@@ -39,10 +39,12 @@ module datapath_test();
             
     end
     
-
     always begin
         #1 clk = ~clk;
-        j = j + 1;
+    end
+
+    always begin
+        #1 j = j + 1;
         if(j > 100000) 
         begin
             for(j = 0; j < 100; j = j + 1)
