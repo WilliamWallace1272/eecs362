@@ -144,7 +144,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                 dmem_info_reg <= dmem_info;
                 write_reg <= 5'b11111;
                 fp_reg_write <= fp_write;
-                fp_read_reg <= fp_read
+                fp_read_reg <= fp_read;
             end
 
             else if (counter > 0) // pass along a nop

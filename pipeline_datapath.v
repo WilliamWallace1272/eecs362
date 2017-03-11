@@ -44,7 +44,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
         .ctrl_reg(ctrl_id), .alu_ctrl_reg(alu_ctrl_id), .busA_reg(busA_id),.busB_reg(busB_id), 
         .imm_ext_reg(imm_ext_id), .dmem_info_reg(dmem_info_id),.jump_or_branch(jump_or_branch_id) , 
         .target(target_id), .reg_lock_if(reg_lock_if1), .write_reg(write_reg_id), .regA(regA_id),
-        .regB(regB_id), .fp_reg_write(fp_reg_write_id));
+        .regB(regB_id), .fp_reg_write(fp_reg_write_id), .fp_read_reg(fp_read));
         
 
 
@@ -55,7 +55,7 @@ module pipeline_datapath (input clk, output [0:31] instr);
         .write_reg_mem(write_reg_ex), .write_val_mem(alu_out_ex), .write_reg_wb(write_reg_mem), 
         .write_val_wb(write_data_wb), .regA(regA_id), .regB(regB_id), .reg_write_mem(ctrl_ex[3]), 
         .reg_write_wb(ctrl_mem[3]), .fp_write(fp_reg_write_id), .fp_write_mem(fp_reg_write_ex),
-        .fp_write_wb(fp_reg_write_mem),
+        .fp_write_wb(fp_reg_write_mem), .fp_read(fp_read),
         //outputs
         .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), 
         .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex), .mult_out_reg(mult_out_ex), 
