@@ -109,9 +109,9 @@ module alu(A, B, func, result);
                         out = 32'h00000000;
                 end
             6'h34: //MOVFP2I
-;
+                out = A;
             6'h35: //MOVI2FP
-;
+                out = A;
             default: 
                 out = 32'h00000000;
         endcase

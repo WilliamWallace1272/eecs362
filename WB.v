@@ -10,13 +10,13 @@ module write_back (input clk, input [0:8] ctrl, input [0:31] mem_out, input [0:3
                             dmem_info[1] ?
                                 mem_out //should actually load fp's which we're ignoring
                                 : dmem_info[2] ?
-                                    {{16{1'b0}}, mem_out[16:31]}
-                                    : {{24{1'b0}}, mem_out[24:31]}
+                                    {{16{1'b0}}, mem_out[0:15]}
+                                    : {{24{1'b0}}, mem_out[0:7]}
                             : dmem_info[1] ?
                                 mem_out
                                 : dmem_info[2] ?
-                                    {{16{mem_out[16]}}, mem_out[16:31]}
-                                    : {{24{mem_out[24]}}, mem_out[24:31]}
+                                    {{16{mem_out[0]}}, mem_out[0:15]}
+                                    : {{24{mem_out[0]}}, mem_out[0:7]}
                         : alu_out;                            
     
 

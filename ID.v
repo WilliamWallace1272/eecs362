@@ -7,7 +7,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     wire [0:8] ctrl_signals;
     wire [0:5] alu_ctrl;
     wire [0:4] rs,rt,rd,rw1,rw2;
-    wire [0:31] busA1, busB1, imm_ext, busA2, busB2;
+    wire [0:31] busA1, busB1, imm_ext, busA2, busB2, busA3, fp_busA, fp_busB;
     wire [0:2] dmem_info;
     
     
@@ -15,6 +15,9 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
 
     reg_file REG_FILE(.clk(clk), .we(we), .wrAddr(WriteReg),.wrData(WriteData), .rdAddrA(rs), 
                                 .rdDataA(busA1), .rdAddrB(rt), .rdDataB(busB1));
+    reg_file FP_REG_FILE(.clk(clk), .we(fp_we), .wrAddr(WriteReg), .wrData(WriteData), .rdAddrA(rs),
+                                .rdDataA(fp_busA), .rdAddrB(rt), .rdDataB(fp_busB));
+
     wire [0:31] jmp_target, branch_target, norm_jmp, target;
     wire zero, jump_or_branch;
    
@@ -45,6 +48,9 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     
     assign busA2 = ctrl_signals[8] ? pc_plus_four : busA1;
     assign busB2 = ctrl_signals[8] ? 32'h04 : busB1;
+
+    assign busA3 = ((instruction[0:5] == 6'b000000 && instruction[26:31] == 6'h34) || instruction[0:5] == 6'h01) 
+                    ? fp_busA : busA2;
 
     assign imm_ext = {{16{instruction[16] & ctrl_signals[7]}}, instruction[16:31]};
     
