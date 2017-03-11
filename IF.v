@@ -16,7 +16,7 @@ endmodule // imem
 
 
 
-module i_fetch (input clk, input reg_lock, input [0:31] target , input jump_or_branch, output [0:31] instr, output [0:31] pc_plus_four);
+module i_fetch (input clk, input reg_lock, input [0:31] target , input jump_or_branch, input reg_lock_mult, output [0:31] instr, output [0:31] pc_plus_four);
     parameter SIZE=4096;
 
     wire [0:31] instruction, plus_four, pc_next;
@@ -32,7 +32,7 @@ module i_fetch (input clk, input reg_lock, input [0:31] target , input jump_or_b
     reg [0:31] instr, pc_plus_four;
     always @ (posedge clk )
     begin
-        if (!reg_lock)
+        if (!reg_lock || !reg_lock_mult)
         begin
             instr <= instruction;
             pc <= pc_next;
