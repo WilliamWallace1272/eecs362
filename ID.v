@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,input [0:4] WriteReg, input [0:31] WriteData, input [0:31] pc_plus_four, input [0:4] write_reg_ex, input [0:4] write_reg_mem, input [0:31] write_val_ex, input [0:31] write_val_mem, input fp_we,
-output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [0:31] busB_reg, output [0:31] imm_ext_reg, output [0:2] dmem_info_reg, output jump_or_branch, output [0:31]target, output reg_lock_if, output [0:4] write_reg, output [0:4] regA, output [0:4] regB);
+output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [0:31] busB_reg, output [0:31] imm_ext_reg, output [0:2] dmem_info_reg, output jump_or_branch, output [0:31]target, output reg_lock_if, output [0:4] write_reg, output [0:4] regA, output [0:4] regB, output fp_reg_write);
    // regwrite is from mem/wb register
    
     wire [0:8] ctrl_signals;
@@ -54,10 +54,13 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     assign busB3 = ((instruction[0:5] == 6'b000000 && instruction[26:31] == 6'h34) || instruction[0:5] == 6'h01) 
                     ? fp_busB : busB2;
 
+    assign fp_write = ((instruction[0:5] == 6'b000000 && instruction[26:31] == 6'h35) 
+                      || instruction[0:5] == 6'h01);
+
     assign imm_ext = {{16{instruction[16] & ctrl_signals[7]}}, instruction[16:31]};
     
     //TODO : add jump/link/branch logic here
-    reg reg_lock_if;
+    reg reg_lock_if, fp_reg_write;
     reg [0:31] counter;
     
     wire [0:31] new_count;
@@ -123,6 +126,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                 imm_ext_reg <= imm_ext;
                 dmem_info_reg <= dmem_info;
                 write_reg <= rw1;
+                fp_reg_write <= fp_write;
             end
 
             if (temp_count2 == 3) //initial
@@ -138,6 +142,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                 imm_ext_reg <= imm_ext;
                 dmem_info_reg <= dmem_info;
                 write_reg <= 5'b11111;
+                fp_reg_write <= fp_write;
                 
             end
 
@@ -153,7 +158,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                 imm_ext_reg <= imm_ext; // if control is all 0 than we should be good
                 dmem_info_reg <= dmem_info;
                 write_reg <= 5'b00000;
-                
+                fp_reg_write <= fp_write;
             end
 
            else  
@@ -167,7 +172,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                 imm_ext_reg <= imm_ext;
                 dmem_info_reg <= dmem_info;
                 write_reg <= rw1;
-        
+                fp_reg_write <= fp_write;
             end
         end
     end

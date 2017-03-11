@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
 
-module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_out, input [0:31] write_data, input [0:2] dmem_info,input [0:4] write_reg, input[0:31] mult_out, input[0:5] alu_ctrl,  output [0:8] ctrl_reg, output [0:31] mem_out_reg, output [0:31] alu_out_reg, output [0:2] dmem_info_reg, output [0:4] write_reg_reg);  
+module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_out, input [0:31] write_data, input [0:2] dmem_info,input [0:4] write_reg, input[0:31] mult_out, input[0:5] alu_ctrl, input fp_write,
+    output [0:8] ctrl_reg, output [0:31] mem_out_reg, output [0:31] alu_out_reg, output [0:2] dmem_info_reg, output [0:4] write_reg_reg, output fp_reg_write);  
    
     wire [0:31] mem_out;
     wire [0:31] mult_or_alu;
@@ -12,6 +13,7 @@ module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_o
     reg [0:31] alu_out_reg;
     reg [0:4] write_reg_reg;
     reg [0:2] dmem_info_reg;
+    reg fp_reg_write;
     always @(posedge clk) begin
         if (!reg_lock)
         begin
@@ -20,6 +22,7 @@ module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_o
             dmem_info_reg <= dmem_info;
             write_reg_reg <= write_reg;
             mem_out_reg <= mem_out;
+            fp_reg_write <= fp_write;
         end
     end
 endmodule
