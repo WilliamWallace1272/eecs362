@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl, input [0:31] busA, input [0:31] busB, input [0:31] imm_ext, input [0:2] dmem_info, input [0:4] write_reg, input [0:4] write_reg_mem, input [0:31] write_val_mem, input [0:4] write_reg_wb, input [0:31] write_val_wb, input [0:4] regA, input [0:4] regB, input reg_write_mem, input reg_write_wb, input fp_write,
+module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl, input [0:31] busA, input [0:31] busB, input [0:31] imm_ext, input [0:2] dmem_info, input [0:4] write_reg, input [0:4] write_reg_mem, input [0:31] write_val_mem, input [0:4] write_reg_wb, input [0:31] write_val_wb, input [0:4] regA, input [0:4] regB, input reg_write_mem, input reg_write_wb, input fp_write, input fp_write_mem, input fp_write_wb,
     output [0:8] ctrl_reg, output [0:31] alu_out_reg, output [0:31] write_data_reg, output [0:2] dmem_info_reg, output [0:4] write_reg_reg, output [0:31] mult_out_reg, output [0:5] alu_ctrl_reg, output [0:4] write_reg_ex, output [0:31] alu_out, output fp_reg_write);
     
    
@@ -15,10 +15,10 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
 
     assign mult_sign = (alu_ctrl == 6'h0e) ? 1 : 0; // 0x0e is signed multiplication
 
-    assign fwdA_mem = ((regA == write_reg_mem) && reg_write_mem) ? 1 : 0;
-    assign fwdA_wb  = ((regA == write_reg_wb) && reg_write_wb)   ? 1 : 0;
-    assign fwdB_mem = ((regB == write_reg_mem) && reg_write_mem) ? 1 : 0;
-    assign fwdB_wb  = ((regB == write_reg_wb) && reg_write_wb)   ? 1 : 0;
+    assign fwdA_mem = ((regA == write_reg_mem) && reg_write_mem && (fp_write == fp_write_mem)) ? 1 : 0;
+    assign fwdA_wb  = ((regA == write_reg_wb) && reg_write_wb && (fp_write == fp_write_wb))    ? 1 : 0;
+    assign fwdB_mem = ((regB == write_reg_mem) && reg_write_mem && (fp_write == fp_write_mem)) ? 1 : 0;
+    assign fwdB_wb  = ((regB == write_reg_wb) && reg_write_wb && (fp_write == fp_write_wb))    ? 1 : 0;
 
     assign busA_forward = fwdA_mem ? write_val_mem
                                    : fwdA_wb ? write_val_wb

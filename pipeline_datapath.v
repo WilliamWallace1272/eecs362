@@ -53,7 +53,8 @@ module pipeline_datapath (input clk, output [0:31] instr);
         .busA(busA_id), .busB(busB_id), .imm_ext(imm_ext_id), .dmem_info(dmem_info_id),.write_reg(write_reg_id), 
         .write_reg_mem(write_reg_ex), .write_val_mem(alu_out_ex), .write_reg_wb(write_reg_mem), 
         .write_val_wb(write_data_wb), .regA(regA_id), .regB(regB_id), .reg_write_mem(ctrl_ex[3]), 
-        .reg_write_wb(ctrl_mem[3]), .fp_write(fp_reg_write_id),
+        .reg_write_wb(ctrl_mem[3]), .fp_write(fp_reg_write_id), .fp_write_mem(fp_reg_write_ex),
+        .fp_write_wb(fp_reg_write_mem),
         //outputs
         .ctrl_reg(ctrl_ex), .alu_out_reg(alu_out_ex), .write_data_reg(write_mem_ex), 
         .dmem_info_reg(dmem_info_ex), .write_reg_reg(write_reg_ex), .mult_out_reg(mult_out_ex), 
