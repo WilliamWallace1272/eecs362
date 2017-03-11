@@ -43,7 +43,7 @@ module datapath_test();
     always begin
         #1 clk = ~clk;
         j = j + 1;
-        if(j > 10000) 
+        if(j > 100000) 
         begin
             for(j = 0; j < 100; j = j + 1)
                 $fwrite(f, "%x\n", DATAPATH.MEM_STAGE.DMEM.mem[16'h2000 + j]);
@@ -56,7 +56,8 @@ module datapath_test();
         end
         if (instr == 32'h44000300)
         begin
-            $display("DMEM -> addr: %x, wdata: %x", DATAPATH.alu_out_ex, DATAPATH.busB_id);
+            $display("DMEM -> addr: %x, wdata: %x\n", DATAPATH.alu_out_ex, DATAPATH.busB_id);
+            $display("The program took %d cycles to complete\n", j/2); 
             #10
             for(j = 0; j < 100; j = j + 1)
             begin
