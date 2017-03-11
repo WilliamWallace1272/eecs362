@@ -44,10 +44,10 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
     reg [0:31] counter;
     reg [0:31] temp_count2;
 
-    assign mult_op = (alu_ctrl == 6'h0e || alu_ctrl == 6'h16) ? 1 : 0;
+    assign mult_op = (alu_ctrl == 6'h0e || (alu_ctrl == 6'h16 && ctrl[0] == 1)) ? 1 : 0; // mult has unique function code, mult u has same as lhi so check ctrl[0]
     booth_mult MULT(.p(full_mult_result), .a(busA_forward), .b(busB2), .clk(clk), .sign(mult_sign));    
-    
-    //assign mult_result = full_mult_result[32:63];
+    wire [0:31] alu_out2;
+    assign alu_out2 = (mult_op) ? full_mult_result[32:63] : alu_out;
     reg reg_lock_mult;
     always @ *
     begin
@@ -105,7 +105,7 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
         begin
             ctrl_reg <= ctrl;
             alu_ctrl_reg <= alu_ctrl;
-            alu_out_reg <= alu_out;
+            alu_out_reg <= alu_out2;
             write_data_reg <= busB_forward;
             dmem_info_reg <= dmem_info;
             write_reg_reg <= write_reg;

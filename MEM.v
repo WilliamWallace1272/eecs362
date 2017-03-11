@@ -8,6 +8,7 @@ module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_o
     dmem DMEM(.addr(alu_out), .rData(mem_out), .wData(write_data), .writeEnable(ctrl[4]), .dsize(dmem_info[1:2]), .clk(clk)); 
 
     assign mult_or_alu = (alu_ctrl == 6'h0e || alu_ctrl == 6'h16) ? mult_out : alu_out;
+    
     reg [0:8] ctrl_reg;
     reg [0:31] mem_out_reg;
     reg [0:31] alu_out_reg;
@@ -18,7 +19,7 @@ module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_o
         if (!reg_lock && !reg_lock_mult)
         begin
             ctrl_reg <= ctrl;
-            alu_out_reg <= mult_or_alu;
+            alu_out_reg <= alu_out;
             dmem_info_reg <= dmem_info;
             write_reg_reg <= write_reg;
             mem_out_reg <= mem_out;
