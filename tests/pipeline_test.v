@@ -1,8 +1,8 @@
 module datapath_test();
     wire [0:31] instr;
     reg clk;
-    parameter IMEMFILE = "fptest_inst.hex";
-    parameter DMEMFILE = "fptest_data.hex";
+    parameter IMEMFILE = "unsigned_inst2.hex";
+    parameter DMEMFILE = "unsigned_data2.hex";
     reg [8*80-1:0] filename;
     integer i, j, f; 
 
