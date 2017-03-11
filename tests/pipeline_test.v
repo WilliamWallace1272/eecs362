@@ -13,6 +13,14 @@ module datapath_test();
     initial begin
         $dumpfile("dump.vcd");
         $dumpvars;
+        for (i = 0; i < 32; i = i + 1)
+        begin
+          DATAPATH.I_DECODE.REG_FILE.regfile[i] = 0;
+          DATAPATH.I_DECODE.FP_REG_FILE.regfile[i] = 0;
+        end
+
+        
+        
         clk = 0;
         j = 0;
        $monitor("the instruction is %x\n", instr);
