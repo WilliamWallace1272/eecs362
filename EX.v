@@ -45,7 +45,7 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
     reg [0:31] temp_count2;
 
     assign mult_op = (alu_ctrl == 6'h0e || alu_ctrl == 6'h16) ? 1 : 0;
-    booth_mult MULT(.p(full_mult_result), .a(busA), .b(busB), .clk(clk), .sign(mult_sign));    
+    booth_mult MULT(.p(full_mult_result), .a(busA_forward), .b(busB2), .clk(clk), .sign(mult_sign));    
     
     //assign mult_result = full_mult_result[32:63];
     reg reg_lock_mult;
@@ -101,7 +101,7 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
         counter <= 0;
       end
 
-      if (!reg_lock || !reg_lock_mult)
+      if (!reg_lock && !reg_lock_mult)
         begin
             ctrl_reg <= ctrl;
             alu_ctrl_reg <= alu_ctrl;

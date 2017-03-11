@@ -32,7 +32,7 @@ module i_fetch (input clk, input reg_lock, input [0:31] target , input jump_or_b
     reg [0:31] instr, pc_plus_four;
     always @ (posedge clk )
     begin
-        if (!reg_lock || !reg_lock_mult)
+        if (!reg_lock && !reg_lock_mult)
         begin
             instr <= instruction;
             pc <= pc_next;

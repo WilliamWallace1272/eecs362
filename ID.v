@@ -100,7 +100,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     end
 
     always @(posedge clk) begin
-        if (!reg_lock || !reg_lock_mult)
+        if (!reg_lock && !reg_lock_mult)
         begin
        /*     if (instruction[0:5] == 6'h03)
                 begin

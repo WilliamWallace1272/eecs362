@@ -15,7 +15,7 @@ module mem_stage (input clk, input reg_lock, input[0:8] ctrl, input [0:31] alu_o
     reg [0:2] dmem_info_reg;
     reg fp_reg_write;
     always @(posedge clk) begin
-        if (!reg_lock || !reg_lock_mult)
+        if (!reg_lock && !reg_lock_mult)
         begin
             ctrl_reg <= ctrl;
             alu_out_reg <= mult_or_alu;
