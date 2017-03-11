@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,input [0:4] WriteReg, input [0:31] WriteData, input [0:31] pc_plus_four, input [0:4] write_reg_ex, input [0:4] write_reg_mem, input [0:31] write_val_ex, input [0:31] write_val_mem, input fp_we, input fp_write_ex, input fp_write_mem,
+module i_decode (input clk, input reg_lock, input [0:31] instruction,input we,input [0:4] WriteReg, input [0:31] WriteData, input [0:31] pc_plus_four, input [0:4] write_reg_ex, input [0:4] write_reg_mem, input [0:31] write_val_ex, input [0:31] write_val_mem, input fp_we, input fp_write_ex, input fp_write_mem, input reg_lock_mult,
 output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [0:31] busB_reg, output [0:31] imm_ext_reg, output [0:2] dmem_info_reg, output jump_or_branch, output [0:31]target, output reg_lock_if, output [0:4] write_reg, output [0:4] regA, output [0:4] regB, output fp_reg_write);
    // regwrite is from mem/wb register
    
@@ -100,7 +100,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     end
 
     always @(posedge clk) begin
-        if (!reg_lock)
+        if (!reg_lock || !reg_lock_mult)
         begin
        /*     if (instruction[0:5] == 6'h03)
                 begin
