@@ -19,14 +19,14 @@ integer i; reg[63:0] answer;
         #0 A=$random%32; B=$random%32; clk = 0; sign = 1;
         for(i = 0; i < 3; i=i+1)
         begin
-            #8 answer = $signed(A)*$signed(B);
+            #20 answer = $signed(A)*$signed(B);
                if (result != answer) $display("ERROR result should be %x, is %x", answer, result);
             #0 A=$random%32; B=$random%32;
         end
-        #10 sign = 0;
+        #30 sign = 0;
         for(i = 0; i < 3; i=i+1)
         begin
-            #8 answer = A*B;
+            #20 answer = A*B;
                if (result != answer) $display("ERROR result should be %x, is %x", answer, result);
             #0 A=$random%32; B=$random%32;
         end

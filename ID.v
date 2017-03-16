@@ -17,6 +17,12 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
                                 .rdDataA(busA1), .rdAddrB(rt), .rdDataB(busB1));
     reg_file FP_REG_FILE(.clk(clk), .we(fp_we), .wrAddr(WriteReg), .wrData(WriteData), .rdAddrA(rs),
                                 .rdDataA(fp_busA), .rdAddrB(rt), .rdDataB(fp_busB));
+//    assign fp_busA = 32'h0;
+//    assign fp_busB = 32'h0;
+
+
+
+
 
     wire [0:31] jmp_target, branch_target, norm_jmp, target;
     wire zero, jump_or_branch;
@@ -28,8 +34,8 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
 
     wire [0:31] jmp_bus;
     wire fwd_br_ex, fwd_br_mem;
-    assign fwd_br_ex = ((rs == write_reg_ex) && !fp_write_ex) ? 1 : 0;
-    assign fwd_br_mem = ((rs == write_reg_mem) && !fp_write_mem) ? 1 : 0;
+    assign fwd_br_ex = ((rs == write_reg_ex) && !fp_write_ex) ? 1'b1 : 1'b0;
+    assign fwd_br_mem = ((rs == write_reg_mem) && !fp_write_mem) ? 1'b1 : 1'b0;
     assign jmp_bus = fwd_br_ex ? write_val_ex
                                   : fwd_br_mem ? write_val_mem
                                                   : busA1;
@@ -59,7 +65,6 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
 
     assign imm_ext = {{16{instruction[16] & ctrl_signals[7]}}, instruction[16:31]};
     
-    //TODO : add jump/link/branch logic here
     reg reg_lock_if, fp_reg_write, fp_read_reg;
     reg [0:31] counter;
     
@@ -73,7 +78,7 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
     reg [0:4] write_reg, regA, regB;
     wire [0:31] temp_count;
     reg [0:31] temp_count2;
-    adder_n ADDER_1(.A(counter), .B(-1), .cin(0), .Sum(temp_count));
+    adder_n ADDER_1(.A(counter), .B(-1), .cin(1'b0), .Sum(temp_count));
 
     always @ *
     begin
@@ -117,7 +122,6 @@ output [0:8] ctrl_reg, output [0:5] alu_ctrl_reg,output [0:31] busA_reg,output [
             begin
                 counter <= 1;
                 ctrl_reg <= ctrl_signals;
-                $display("counter is %x", counter);
                 alu_ctrl_reg <= alu_ctrl;
                 busA_reg <= busA3; // pure A and B registers
                 busB_reg <= busB3;

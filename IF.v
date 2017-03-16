@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module imem(addr, instr);
-    parameter SIZE=4096;
+    parameter SIZE=1; //8192
     parameter OFFSET=0;
 
     input [0:31] addr;
@@ -17,18 +17,18 @@ endmodule // imem
 
 
 module i_fetch (input clk, input reg_lock, input [0:31] target , input jump_or_branch, input reg_lock_mult, output [0:31] instr, output [0:31] pc_plus_four);
-    parameter SIZE=4096;
 
     wire [0:31] instruction, plus_four, pc_next;
 
-    imem #(.SIZE(8192)) IMEM(.addr(pc), .instr(instruction));
+    reg [0:31] pc;
+
+    imem IMEM(.addr(pc), .instr(instruction));
 
 
     adder_n ADDER_PLUS_FOUR (.A(pc), .B(32'h4), .cin(1'b0), .Sum(plus_four));
     
     assign pc_next  = jump_or_branch ? target : plus_four;
    
-    reg [0:31] pc;
     reg [0:31] instr, pc_plus_four;
     always @ (posedge clk )
     begin

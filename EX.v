@@ -7,7 +7,7 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
     wire [0:31] busB2;   
     wire [0:31] alu_out;
     wire [0:31] busA_forward, busB_forward;
-    wire [0:63] full_mult_result;
+    wire [0:31] full_mult_result;
     wire [0:31] mult_result;
     wire [0:31] final_A;
     wire [0:31] final_B;
@@ -18,12 +18,12 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
     assign busB2 = (ctrl[1]) ? imm_ext : busB_forward; 
 
     
-    assign mult_sign = (alu_ctrl == 6'h0e) ? 1 : 0; // 0x0e is signed multiplication
+    assign mult_sign = (alu_ctrl == 6'h0e) ? 1'b1 : 1'b0; // 0x0e is signed multiplication
 
-    assign fwdA_mem = ((regA == write_reg_mem) && reg_write_mem && (fp_read == fp_write_mem)) ? 1 : 0;
-    assign fwdA_wb  = ((regA == write_reg_wb) && reg_write_wb && (fp_read == fp_write_wb))    ? 1 : 0;
-    assign fwdB_mem = ((regB == write_reg_mem) && reg_write_mem && (fp_read == fp_write_mem)) ? 1 : 0;
-    assign fwdB_wb  = ((regB == write_reg_wb) && reg_write_wb && (fp_read == fp_write_wb))    ? 1 : 0;
+    assign fwdA_mem = ((regA == write_reg_mem) && reg_write_mem && (fp_read == fp_write_mem)) ? 1'b1 : 1'b0;
+    assign fwdA_wb  = ((regA == write_reg_wb) && reg_write_wb && (fp_read == fp_write_wb))    ? 1'b1 : 1'b0;
+    assign fwdB_mem = ((regB == write_reg_mem) && reg_write_mem && (fp_read == fp_write_mem)) ? 1'b1 : 1'b0;
+    assign fwdB_wb  = ((regB == write_reg_wb) && reg_write_wb && (fp_read == fp_write_wb))    ? 1'b1 : 1'b0;
 
     assign busA_forward = fwdA_mem ? write_val_mem
                                    : fwdA_wb ? write_val_wb
@@ -35,19 +35,20 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
 
     alu ALU(.A(final_A), .B(final_B), .func(alu_ctrl_or_counter), .result(alu_out));
    
+    reg [0:31] counter;
+   
     assign alu_ctrl_or_counter = (mult_op) ? 6'h22 : alu_ctrl;
     assign final_A = (mult_op) ? counter : busA_forward;
     assign final_B = (mult_op) ? 1 : busB2;
 
     wire [0:31] temp_count;
     assign temp_count = alu_out;
-    reg [0:31] counter;
     reg [0:31] temp_count2;
 
-    assign mult_op = (alu_ctrl == 6'h0e || (alu_ctrl == 6'h16 && ctrl[0] == 1)) ? 1 : 0; // mult has unique function code, mult u has same as lhi so check ctrl[0]
+    assign mult_op = (alu_ctrl == 6'h0e || (alu_ctrl == 6'h16 && ctrl[0] == 1)) ? 1'b1 : 1'b0; // mult has unique function code, mult u has same as lhi so check ctrl[0]
     booth_mult MULT(.p(full_mult_result), .a(busA_forward), .b(busB2), .clk(clk), .sign(mult_sign));    
     wire [0:31] alu_out2;
-    assign alu_out2 = (mult_op) ? full_mult_result[32:63] : alu_out;
+    assign alu_out2 = (mult_op) ? full_mult_result : alu_out;
     reg reg_lock_mult;
     always @ *
     begin
@@ -109,7 +110,7 @@ module execute (input clk, input reg_lock, input[0:8] ctrl, input [0:5] alu_ctrl
             write_data_reg <= busB_forward;
             dmem_info_reg <= dmem_info;
             write_reg_reg <= write_reg;
-            mult_out_reg <= full_mult_result[32:63];
+            mult_out_reg <= full_mult_result;
             fp_reg_write <= fp_write;
             
         end

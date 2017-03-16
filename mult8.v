@@ -39,6 +39,8 @@ module booth_mult (p, a, b, clk, sign);
     always @ (x or y or inv_x or sign)
     begin
         //$display("x is %x, y is %x", x, y);
+//        update <= 1;
+//        count = 0;
         cc[0] = {y[1], y[0], 1'b0};
         for(kk=1;kk<N;kk=kk+1)
             cc[kk] = {y[2*kk+1],y[2*kk],y[2*kk-1]};
@@ -55,6 +57,8 @@ module booth_mult (p, a, b, clk, sign);
             for(ii=0;ii<kk;ii=ii+1)
                 spp[kk] = {spp[kk],2'b00}; //multiply by 2 to the power x or shifting operation
         end 
+//        prod = spp[0];
+   //     update <= 0;
     end
  
 
@@ -64,15 +68,18 @@ module booth_mult (p, a, b, clk, sign);
         if((x_reg != x) || (y_reg != y) || (inv_x_reg != inv_x) || (sign_reg != sign))
         begin
             count = 0;
-            prod  = spp[0];
+            prod = spp[0];
         end
 //        else
 //        begin
             case(count)
-                0: for(jj=1;jj<N/4;jj=jj+1)  prod = prod + spp[jj];
-                1: for(jj=N/4;jj<N/2;jj=jj+1)  prod = prod + spp[jj];
-                2: for(jj=N/2;jj<3*N/4;jj=jj+1)  prod = prod + spp[jj];
-                3: for(jj=3*N/4;jj<N;jj=jj+1)  prod = prod + spp[jj];
+                0:   prod = prod + spp[1];
+                1:   prod = prod + spp[2];
+                2:   prod = prod + spp[3];
+                3:   prod = prod + spp[4];
+                4:   prod = prod + spp[5];
+                5:   prod = prod + spp[6];
+                6:   prod = prod + spp[7];
                 default: ;
             endcase
             count = (count + 1);

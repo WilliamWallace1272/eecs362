@@ -18,7 +18,10 @@ module datapath_test();
           DATAPATH.I_DECODE.REG_FILE.regfile[i] = 0;
           DATAPATH.I_DECODE.FP_REG_FILE.regfile[i] = 0;
         end
-
+        DATAPATH.reg_lock_id = 0;
+        DATAPATH.reg_lock_ex = 0;
+        DATAPATH.reg_lock_mem = 0;
+        DATAPATH.reg_lock_wb = 0;
         
         
         clk = 0;
